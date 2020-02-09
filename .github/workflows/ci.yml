@@ -24,3 +24,27 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 3.1.100
+
+      # Retrieves dependencies from the cache if present, creates cache if not
+      - id: nuget-cache
+        name: Cache nuget dependencies
+        continue-on-error: true
+        uses: actions/cache@v1
+        with:
+          path: ~/.nuget/packages
+          key: "${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}"
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      # Run build and tests, saving test results
+      - id: test
+        name: Run tests
+        run: "dotnet test -property:TreatWarningsAsErrors=true -r test-output -l trx -l console -l html"
+
+      # Upload artifacts
+      - id: Upload
+        name: Upload artifacts
+        uses: actions/upload-artifact@v1
+        with:
+          path: test-output
+          name: test-output

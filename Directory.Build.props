@@ -12,10 +12,16 @@
     <!-- Needed to be able to detect changes in package dependencies automatically -->
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
     <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)\apiview.ruleset</CodeAnalysisRuleSet>
+    <SkipDefaultEditorConfigAsAdditionalFile>true</SkipDefaultEditorConfigAsAdditionalFile>
   </PropertyGroup>
   <ItemGroup>
     <!-- Prevent package locks from being seen as content for apps where json files are used -->
     <Content Remove="**\packages.lock.json" />
     <None Include="**\packages.lock.json" />
+
+    <!-- Enable FXCop and other roslyn analyzers -->
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.8" PrivateAssets="All"/>
+    <!-- Register editorconfig for fxcop usage -->
+    <AdditionalFiles Include="$(MSBuildThisFileDirectory)\.editorconfig"/>
   </ItemGroup>
 </Project>

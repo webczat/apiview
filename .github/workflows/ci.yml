@@ -1,0 +1,26 @@
+---
+# Workflow for running continuous integration
+name: Continuous Integration Workflow
+# Acts on new or changed pull requests and also on new pushes
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  push:
+
+jobs:
+  test:
+    # Job executing test suites
+    name: Run tests
+    runs-on: ubuntu-latest
+    steps:
+      # Checks out the repository for current branch
+      - id: checkout
+        name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Installs dotnet core to be able to build things
+      - id: dotnet-setup
+        name: Set up dotnet core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1.100

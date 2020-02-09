@@ -11,6 +11,7 @@
     <Nullable>Enable</Nullable>
     <!-- Needed to be able to detect changes in package dependencies automatically -->
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+    <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)\apiview.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <!-- Prevent package locks from being seen as content for apps where json files are used -->

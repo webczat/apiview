@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp31</TargetFramework>
+    <OutputType>Library</OutputType>
+    <AssemblyName>Apiview.Lib</AssemblyName>
+    <RootNamespace>Apiview</RootNamespace>
+    <Title>Apiview library</Title>
+    <Description>A library providing the model for dotnet api and ability to load it from projects or packages</Description>
+  </PropertyGroup>
+</Project>

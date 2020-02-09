@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp31</TargetFramework>
+    <OutputType>Library</OutputType>
+    <AssemblyName>apiview.LibTests</AssemblyName>
+    <IsPackable>false</IsPackable>
+    <RootNamespace>Apiview.Tests</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Lib\Lib.csproj"/>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0"/>
+    <PackageReference Include="Xunit" Version="2.4.1"/>
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1"/>
+    <PackageReference Include="XUnit.Analyzers" Version="0.10.0"/>
+    <PackageReference Include="coverlet.collector" Version="1.2.0"/>
+  </ItemGroup>
+</Project>

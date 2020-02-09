@@ -1,0 +1,36 @@
+{
+  // This is stylecop.json for configuring stylecop analyzer.
+  "$schema": "https://raw.githubusercontent.com/DotNetAnalyzers/StyleCopAnalyzers/master/StyleCop.Analyzers/StyleCop.Analyzers/Settings/stylecop.schema.json",
+  "settings": {
+    "documentationRules": {
+      "xmlHeader": false,
+      "copyrightText": "Copyright (C) Michał Zegan <webczat_200@poczta.onet.pl>.\nAll rights reserved.\nThis file is licensed under the BSD-2-Clause license, see 'LICENSE' file in source root for more details.",
+      "documentationCulture": "en-US",
+      "fileNamingConvention": "metadata",
+    },
+    "indentation": {
+      "indentationSize": 4,
+      "useTabs": false
+    },
+    "layoutRules": {
+      "newlineAtEndOfFile": "allow",
+      "allowConsecutiveUsings": false
+    },
+    "namingRules": {
+      "tupleElementNameCasing": "PascalCase"
+    },
+    "orderingRules": {
+      "blankLinesBetweenUsingGroups": "allow",
+      "systemUsingDirectivesFirst": true,
+      "usingDirectivesPlacement": "outsideNamespace",
+      "elementOrder": [
+        "kind",
+        "accessibility",
+        "constant",
+        "static",
+        "readonly"
+      ]
+    }
+  }
+}
+}

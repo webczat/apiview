@@ -23,5 +23,10 @@
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.8" PrivateAssets="All"/>
     <!-- Register editorconfig for fxcop usage -->
     <AdditionalFiles Include="$(MSBuildThisFileDirectory)\.editorconfig"/>
+
+    <!-- Enable stylecop analyzers -->
+    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118" PrivateAssets="All"/>
+    <!-- Set up stylecop.json -->
+    <AdditionalFiles Include="$(MSBuildThisFileDirectory)\.stylecop.json"/>
   </ItemGroup>
 </Project>

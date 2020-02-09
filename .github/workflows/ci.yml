@@ -39,7 +39,13 @@ jobs:
       # Run build and tests, saving test results
       - id: test
         name: Run tests
-        run: "dotnet test -property:TreatWarningsAsErrors=true -r test-output -l trx -l console -l html"
+        run: "dotnet test -property:TreatWarningsAsErrors=true -r test-output -l trx -l console -l html --collect:'XPlat Code Coverage'"
+
+      # Generate code coverage reports based on coverage.cobertura.xml files
+      - id: coverage-report
+        name: Generate html coverage report
+        continue-on-error: true
+        run: "dotnet ~/.nuget/packages/reportgenerator/4.4.7/tools/netcoreapp30/ReportGenerator.dll -reports:'**/coverage.cobertura.xml' -targetdir:test-output/coverage-report"
 
       # Upload artifacts
       - id: Upload

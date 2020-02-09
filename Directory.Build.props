@@ -28,5 +28,8 @@
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118" PrivateAssets="All"/>
     <!-- Set up stylecop.json -->
     <AdditionalFiles Include="$(MSBuildThisFileDirectory)\.stylecop.json"/>
+
+    <!-- Add the report generator for coverage reports -->
+    <PackageReference Include="reportgenerator" Version="4.4.7" PrivateAssets="All"/>
   </ItemGroup>
 </Project>

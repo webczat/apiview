@@ -45,7 +45,7 @@ jobs:
       - id: coverage-report
         name: Generate html coverage report
         continue-on-error: true
-        run: "dotnet ~/.nuget/packages/reportgenerator/4.4.7/tools/netcoreapp30/ReportGenerator.dll -reports:'**/coverage.cobertura.xml' -targetdir:test-output/coverage-report"
+        run: "dotnet ~/.nuget/packages/reportgenerator/4.4.7/tools/netcoreapp3.0/ReportGenerator.dll -reports:'**/coverage.cobertura.xml' -targetdir:test-output/coverage-report"
 
       # Upload artifacts
       - id: Upload

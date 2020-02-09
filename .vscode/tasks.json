@@ -1,0 +1,6 @@
+{
+  // This file defines tasks that can be run on the workspace.
+  // This means things like solution building.
+  "version": "2.0.0",
+  "tasks": []
+}

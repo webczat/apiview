@@ -44,6 +44,7 @@ jobs:
       # Upload artifacts
       - id: Upload
         name: Upload artifacts
+        continue-on-error: true
         uses: actions/upload-artifact@v1
         with:
           path: test-output

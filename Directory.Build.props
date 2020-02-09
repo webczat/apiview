@@ -1,0 +1,20 @@
+<Project>
+  <PropertyGroup>
+    <!-- Metadata common between projects -->
+    <Version>1.0.0-dev</Version>
+    <Authors>webczat</Authors>
+    <Copyright>Copyright (C) Michał Zegan &lt;webczat_200@poczta.onet.pl&gt;</Copyright>
+    <PackageLicenseExpression>BSD-2-Clause</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/webczat/apiview</RepositoryUrl>
+
+    <!-- Project settings -->
+    <Nullable>Enable</Nullable>
+    <!-- Needed to be able to detect changes in package dependencies automatically -->
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- Prevent package locks from being seen as content for apps where json files are used -->
+    <Content Remove="**\packages.lock.json" />
+    <None Include="**\packages.lock.json" />
+  </ItemGroup>
+</Project>

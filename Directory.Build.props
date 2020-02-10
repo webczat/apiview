@@ -8,6 +8,7 @@
     <RepositoryUrl>https://github.com/webczat/apiview</RepositoryUrl>
 
     <!-- Project settings -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Nullable>Enable</Nullable>
     <!-- Needed to be able to detect changes in package dependencies automatically -->
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>

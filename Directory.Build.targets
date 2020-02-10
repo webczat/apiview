@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<Project>
+  <!-- File normally used to add targets, here it's to add properties dependent on the actual project output. -->
+  <PropertyGroup>
+    <CodeAnalysisRuleSet Condition="'$(TestProject)' != true">$(MSBuildThisFileDirectory)\apiview.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet Condition="'$(TestProject)' == true">$(MSBuildThisFileDirectory)\apiview-tests.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+</Project>

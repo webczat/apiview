@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<RuleSet Name="apiview rule set for test projects" ToolsVersion="12.0">
+  <Include Path="apiview.ruleset" Action="Default"/>
+</RuleSet>

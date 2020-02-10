@@ -4,7 +4,7 @@
     <TestProject>true</TestProject>
     <TargetFramework>netcoreapp31</TargetFramework>
     <OutputType>Library</OutputType>
-    <AssemblyName>apiview.LibTests</AssemblyName>
+    <AssemblyName>apiview.Tests</AssemblyName>
     <IsPackable>false</IsPackable>
     <RootNamespace>Apiview.Tests</RootNamespace>
   </PropertyGroup>

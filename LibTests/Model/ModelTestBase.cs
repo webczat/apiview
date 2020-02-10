@@ -23,12 +23,8 @@ namespace Apiview.Tests.Model
         /// <summary>
         /// Creates a <see cref="Compilation"/> instance based on a given c# source code fragment.
         /// </summary>
-        /// <param name="source">
-        /// Source text to compile.
-        /// </param>
-        /// <returns>
-        /// The <see cref="Compilation"/> instance.
-        /// </returns>
+        /// <param name="source">Source text to compile.</param>
+        /// <returns>The <see cref="Compilation"/> instance.</returns>
         protected static Compilation CreateCompilation(string source)
         {
             var parsedSource = SyntaxFactory.ParseSyntaxTree(source);

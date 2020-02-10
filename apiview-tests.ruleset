@@ -1,4 +1,10 @@
 <?xml version="1.0"?>
 <RuleSet Name="apiview rule set for test projects" ToolsVersion="12.0">
   <Include Path="apiview.ruleset" Action="Default"/>
+  <Rules AnalyzerId="StyleCop.Analyzers" RuleNamespace="StyleCop.Analyzers">
+    <Rule Id="SA1600" Action="Hidden"/>
+  </Rules>
+  <Rules AnalyzerId="Microsoft.CodeAnalysis.CSharp" RuleNamespace="Microsoft.CodeAnalysis.CSharp">
+    <Rule Id="CS1591" Action="Hidden"/>
+  </Rules>
 </RuleSet>

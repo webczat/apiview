@@ -9,21 +9,21 @@ namespace Apiview.Model
     /// <summary>
     /// Instances of this class describe an user defined named type, whether a class, struct, interface, enum or delegate.
     /// </summary>
-    public class TypeDescriptor
+    public class TypeDescription
     {
         // The underlying ISymbol describing the type
         private readonly INamedTypeSymbol symbol;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TypeDescriptor"/> class.
+        /// Initializes a new instance of the <see cref="TypeDescription"/> class.
         /// </summary>
         /// <param name="symbol">The wrapped roslyn symbol.</param>
-        public TypeDescriptor(INamedTypeSymbol symbol) => this.symbol = symbol;
+        public TypeDescription(INamedTypeSymbol symbol) => this.symbol = symbol;
 
         /// <summary>
         /// Gets a type name without namespace.
         /// </summary>
         /// <value>The type name without namespace.</value>
-        public string Name => this.symbol.Name;
+        public string Name => this.symbol.MetadataName;
     }
 }

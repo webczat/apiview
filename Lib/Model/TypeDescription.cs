@@ -2,6 +2,7 @@
 // All rights reserved.
 // This file is licensed under the BSD-2-Clause license, see 'LICENSE' file in source root for more details.
 
+using System;
 using System.Diagnostics;
 using Microsoft.CodeAnalysis;
 
@@ -67,5 +68,34 @@ namespace Apiview.Model
         /// </summary>
         /// <value><c>true</c> if the type is readonly.</value>
         public bool IsReadonly => this.symbol.IsReadOnly;
+
+        /// <summary>
+        /// Gets the type's accessibility.
+        /// </summary>
+        /// <value>The type's accessibility.</value>
+        public Accessibility Accessibility => this.symbol.DeclaredAccessibility switch
+        {
+            Microsoft.CodeAnalysis.Accessibility.Public => Accessibility.Public,
+            Microsoft.CodeAnalysis.Accessibility.Protected => Accessibility.Protected,
+            Microsoft.CodeAnalysis.Accessibility.ProtectedOrInternal => Accessibility.ProtectedInternal,
+            Microsoft.CodeAnalysis.Accessibility.Internal => Accessibility.Internal,
+            Microsoft.CodeAnalysis.Accessibility.ProtectedAndInternal => Accessibility.PrivateProtected,
+            Microsoft.CodeAnalysis.Accessibility.Private => Accessibility.Private,
+            _ => throw new NotImplementedException($"Type with unknown accessibility '{this.symbol.DeclaredAccessibility}'")
+        };
+
+        /// <summary>
+        /// Gets the type's kind.
+        /// </summary>
+        /// <value>The type's kind.</value>
+        public TypeKind Kind => this.symbol.TypeKind switch
+        {
+            Microsoft.CodeAnalysis.TypeKind.Class => TypeKind.Class,
+            Microsoft.CodeAnalysis.TypeKind.Interface => TypeKind.Interface,
+            Microsoft.CodeAnalysis.TypeKind.Struct => TypeKind.Struct,
+            Microsoft.CodeAnalysis.TypeKind.Enum => TypeKind.Enum,
+            Microsoft.CodeAnalysis.TypeKind.Delegate => TypeKind.Delegate,
+            _ => throw new NotImplementedException($"Unknown type kind '{this.symbol.TypeKind}'")
+        };
     }
 }

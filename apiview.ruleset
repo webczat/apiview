@@ -2,5 +2,7 @@
 <RuleSet Name="apiview rule set" ToolsVersion="12.0">
   <Rules AnalyzerId="Microsoft.CodeAnalysis.FXCopAnalyzers" RuleNamespace="Microsoft.CodeAnalysis.FXCopAnalyzers">
     <Rule Id="CA1062" Action="Hidden"/>
+    <Rule Id="CA1065" Action="Hidden"/>
+    <Rule Id="CA1303" Action="Hidden"/>
   </Rules>
 </RuleSet>

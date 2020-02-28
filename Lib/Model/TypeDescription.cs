@@ -81,6 +81,7 @@ namespace Apiview.Model
             Microsoft.CodeAnalysis.Accessibility.Internal => Accessibility.Internal,
             Microsoft.CodeAnalysis.Accessibility.ProtectedAndInternal => Accessibility.PrivateProtected,
             Microsoft.CodeAnalysis.Accessibility.Private => Accessibility.Private,
+            Microsoft.CodeAnalysis.Accessibility.NotApplicable => Accessibility.Unknown,
             _ => throw new NotImplementedException($"Type with unknown accessibility '{this.symbol.DeclaredAccessibility}'")
         };
 

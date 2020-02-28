@@ -38,5 +38,10 @@ namespace Apiview.Model
         /// The member is private.
         /// </summary>
         Private,
+
+        /// <summary>
+        /// The member has unknown accessibility.
+        /// </summary>
+        Unknown,
     }
 }

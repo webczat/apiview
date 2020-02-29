@@ -22,7 +22,6 @@ namespace Apiview.Model
         /// <param name="symbol">The wrapped roslyn symbol.</param>
         public MetadataTypeDescription(INamedTypeSymbol symbol)
         {
-            Debug.Assert(!(symbol is IErrorTypeSymbol), $"{nameof(MetadataTypeDescription)} does not support unresolved types");
             Debug.Assert(!symbol.IsImplicitlyDeclared, $"{nameof(MetadataTypeDescription)} does not support compiler generated types");
             this.symbol = symbol;
         }

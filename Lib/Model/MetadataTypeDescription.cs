@@ -95,6 +95,7 @@ namespace Apiview.Model
             Microsoft.CodeAnalysis.TypeKind.Struct => TypeKind.Struct,
             Microsoft.CodeAnalysis.TypeKind.Enum => TypeKind.Enum,
             Microsoft.CodeAnalysis.TypeKind.Delegate => TypeKind.Delegate,
+            Microsoft.CodeAnalysis.TypeKind.Error => TypeKind.Missing,
             _ => throw new NotImplementedException($"Unknown type kind '{this.symbol.TypeKind}'")
         };
     }

@@ -33,5 +33,10 @@ namespace Apiview.Model
         /// The type is a delegate.
         /// </summary>
         Delegate,
+
+        /// <summary>
+        /// The type is missing, so we don't know it's kind.
+        /// </summary>
+        Missing,
     }
 }

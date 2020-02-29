@@ -42,5 +42,20 @@ namespace Apiview.Tests.Model
 
             Assert.Equal(Apiview.Model.Accessibility.Unknown, accessibility);
         }
+
+        [Fact]
+        public void KindPropertyReturnsMissingForMissingTypes()
+        {
+            var source = @"
+            public class X
+            {
+            }
+            ";
+            var symbol = (IErrorTypeSymbol)(CreateCompilation(source).GetTypeByMetadataName("X").BaseType!);
+
+            var kind = new MissingMetadataTypeDescription(symbol).Kind;
+
+            Assert.Equal(Apiview.Model.TypeKind.Missing, kind);
+        }
     }
 }

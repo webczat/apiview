@@ -2,8 +2,6 @@
 // All rights reserved.
 // This file is licensed under the BSD-2-Clause license, see 'LICENSE' file in source root for more details.
 
-using System;
-using System.Diagnostics;
 using Microsoft.CodeAnalysis;
 
 namespace Apiview.Model
@@ -57,22 +55,6 @@ namespace Apiview.Model
         /// </summary>
         /// <value><c>true</c> if the type is readonly.</value>
         public bool IsReadonly => this.Symbol.IsReadOnly;
-
-        /// <summary>
-        /// Gets the type's accessibility.
-        /// </summary>
-        /// <value>The type's accessibility.</value>
-        public Accessibility Accessibility => this.Symbol.DeclaredAccessibility switch
-        {
-            Microsoft.CodeAnalysis.Accessibility.Public => Accessibility.Public,
-            Microsoft.CodeAnalysis.Accessibility.Protected => Accessibility.Protected,
-            Microsoft.CodeAnalysis.Accessibility.ProtectedOrInternal => Accessibility.ProtectedInternal,
-            Microsoft.CodeAnalysis.Accessibility.Internal => Accessibility.Internal,
-            Microsoft.CodeAnalysis.Accessibility.ProtectedAndInternal => Accessibility.PrivateProtected,
-            Microsoft.CodeAnalysis.Accessibility.Private => Accessibility.Private,
-            Microsoft.CodeAnalysis.Accessibility.NotApplicable => Accessibility.Unknown,
-            _ => throw new NotImplementedException($"Type with unknown accessibility '{this.Symbol.DeclaredAccessibility}'")
-        };
 
         /// <summary>
         /// Gets the symbol from base class downcasted to an instance of <see cref="INamedTypeSymbol"/>.

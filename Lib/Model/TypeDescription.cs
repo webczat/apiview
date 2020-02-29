@@ -3,7 +3,6 @@
 // This file is licensed under the BSD-2-Clause license, see 'LICENSE' file in source root for more details.
 
 using System;
-using System.Diagnostics;
 using Microsoft.CodeAnalysis;
 
 namespace Apiview.Model
@@ -12,23 +11,16 @@ namespace Apiview.Model
     /// Describes any type, whether user defined or not, including builtin types, array and pointer types, etc.
     /// Instances of this class represent both type usages and type definitions.
     /// </summary>
-    public abstract class TypeDescription
+    public abstract class TypeDescription : ElementDescription
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="TypeDescription"/> class.
         /// </summary>
         /// <param name="symbol">The symbol instance.</param>
         protected TypeDescription(ITypeSymbol symbol)
+            : base(symbol)
         {
-            Debug.Assert(!symbol.IsImplicitlyDeclared, $"{nameof(MetadataTypeDescription)} does not support compiler generated types");
-            this.Symbol = symbol;
         }
-
-        /// <summary>
-        /// Gets a type name without namespace.
-        /// </summary>
-        /// <value>The type name without namespace, or null if the type is not named.</value>
-        public virtual string? Name => this.Symbol.MetadataName;
 
         /// <summary>
         /// Gets the type's kind.
@@ -46,12 +38,9 @@ namespace Apiview.Model
         };
 
         /// <summary>
-        /// Gets the wrapped symbol.
+        /// Gets the wrapped symbol, downcasted.
         /// </summary>
-        /// <value>The wrapped symbol.</value>
-        protected ITypeSymbol Symbol
-        {
-            get;
-        }
+        /// <value>The symbol, downcasted.</value>
+        protected new ITypeSymbol Symbol => (ITypeSymbol)base.Symbol;
     }
 }

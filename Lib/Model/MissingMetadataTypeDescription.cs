@@ -10,7 +10,7 @@ namespace Apiview.Model
     /// Represents missing metadata types, that is types that cannot be found because of missing assembly references or because of other errors.
     /// </summary>
     /// <remarks>
-    /// <para>Note that except the <see cref="MetadataTypeDescription.Name"/> property, values of other properties are undefined for missing types.</para>
+    /// <para>Note that values of most properties except these defining the type name, kind and containing types/namespaces are undefined for missing types.</para>
     /// <para>Before operating on named metadata types, one should usually check if an instance is not an <see cref="MissingMetadataTypeDescription"/>. This may not be necessary if an API returning <see cref="MetadataTypeDescription"/> instances is guaranteed to return known types.</para>
     /// </remarks>
     public class MissingMetadataTypeDescription : MetadataTypeDescription

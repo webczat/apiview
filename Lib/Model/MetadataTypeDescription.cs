@@ -11,68 +11,58 @@ namespace Apiview.Model
     /// <summary>
     /// Instances of this class describe an user defined named type, whether a class, struct, interface, enum or delegate.
     /// </summary>
-    public class MetadataTypeDescription
+    public class MetadataTypeDescription : TypeDescription
     {
-        // The underlying ISymbol describing the type
-        private readonly INamedTypeSymbol symbol;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="MetadataTypeDescription"/> class.
         /// </summary>
         /// <param name="symbol">The wrapped roslyn symbol.</param>
         public MetadataTypeDescription(INamedTypeSymbol symbol)
+            : base(symbol)
         {
-            Debug.Assert(!symbol.IsImplicitlyDeclared, $"{nameof(MetadataTypeDescription)} does not support compiler generated types");
-            this.symbol = symbol;
         }
-
-        /// <summary>
-        /// Gets a type name without namespace.
-        /// </summary>
-        /// <value>The type name without namespace.</value>
-        public string Name => this.symbol.MetadataName;
 
         /// <summary>
         /// Gets a value indicating whether the type is abstract.
         /// </summary>
         /// <value><c>true</c> when the type is abstract.</value>
-        public bool IsAbstract => this.symbol.IsAbstract;
+        public bool IsAbstract => this.Symbol.IsAbstract;
 
         /// <summary>
         /// Gets a value indicating whether the type is sealed.
         /// </summary>
         /// <value><c>true</c> if the type is sealed.</value>
-        public bool IsSealed => this.symbol.IsSealed;
+        public bool IsSealed => this.Symbol.IsSealed;
 
         /// <summary>
         /// Gets a value indicating whether the type is generic.
         /// </summary>
         /// <value><c>true</c> when the type is generic.</value>
-        public bool IsGeneric => this.symbol.IsGenericType;
+        public bool IsGeneric => ((INamedTypeSymbol)this.Symbol).IsGenericType;
 
         /// <summary>
         /// Gets a value indicating whether the type is static.
         /// </summary>
         /// <value><c>true</c> if the type is static.</value>
-        public bool IsStatic => this.symbol.IsStatic;
+        public bool IsStatic => this.Symbol.IsStatic;
 
         /// <summary>
         /// Gets a value indicating whether the type is ref-like (ref struct).
         /// </summary>
         /// <value><c>true</c> if the type is ref-like.</value>
-        public bool IsRefLike => this.symbol.IsRefLikeType;
+        public bool IsRefLike => this.Symbol.IsRefLikeType;
 
         /// <summary>
         /// Gets a value indicating whether the type is readonly.
         /// </summary>
         /// <value><c>true</c> if the type is readonly.</value>
-        public bool IsReadonly => this.symbol.IsReadOnly;
+        public bool IsReadonly => this.Symbol.IsReadOnly;
 
         /// <summary>
         /// Gets the type's accessibility.
         /// </summary>
         /// <value>The type's accessibility.</value>
-        public Accessibility Accessibility => this.symbol.DeclaredAccessibility switch
+        public Accessibility Accessibility => this.Symbol.DeclaredAccessibility switch
         {
             Microsoft.CodeAnalysis.Accessibility.Public => Accessibility.Public,
             Microsoft.CodeAnalysis.Accessibility.Protected => Accessibility.Protected,
@@ -81,22 +71,7 @@ namespace Apiview.Model
             Microsoft.CodeAnalysis.Accessibility.ProtectedAndInternal => Accessibility.PrivateProtected,
             Microsoft.CodeAnalysis.Accessibility.Private => Accessibility.Private,
             Microsoft.CodeAnalysis.Accessibility.NotApplicable => Accessibility.Unknown,
-            _ => throw new NotImplementedException($"Type with unknown accessibility '{this.symbol.DeclaredAccessibility}'")
-        };
-
-        /// <summary>
-        /// Gets the type's kind.
-        /// </summary>
-        /// <value>The type's kind.</value>
-        public TypeKind Kind => this.symbol.TypeKind switch
-        {
-            Microsoft.CodeAnalysis.TypeKind.Class => TypeKind.Class,
-            Microsoft.CodeAnalysis.TypeKind.Interface => TypeKind.Interface,
-            Microsoft.CodeAnalysis.TypeKind.Struct => TypeKind.Struct,
-            Microsoft.CodeAnalysis.TypeKind.Enum => TypeKind.Enum,
-            Microsoft.CodeAnalysis.TypeKind.Delegate => TypeKind.Delegate,
-            Microsoft.CodeAnalysis.TypeKind.Error => TypeKind.Missing,
-            _ => throw new NotImplementedException($"Unknown type kind '{this.symbol.TypeKind}'")
+            _ => throw new NotImplementedException($"Type with unknown accessibility '{this.Symbol.DeclaredAccessibility}'")
         };
     }
 }

@@ -243,7 +243,7 @@ namespace Apiview.Tests.Model
 
             var accessibility = new MetadataTypeDescription(symbol).Accessibility;
 
-            Assert.Equal(Accessibility.Public, accessibility);
+            Assert.Equal(AccessibilityModifier.Public, accessibility);
         }
 
         [Fact]
@@ -261,7 +261,7 @@ namespace Apiview.Tests.Model
 
             var accessibility = new MetadataTypeDescription(symbol).Accessibility;
 
-            Assert.Equal(Accessibility.Protected, accessibility);
+            Assert.Equal(AccessibilityModifier.Protected, accessibility);
         }
 
         [Fact]
@@ -279,7 +279,7 @@ namespace Apiview.Tests.Model
 
             var accessibility = new MetadataTypeDescription(symbol).Accessibility;
 
-            Assert.Equal(Accessibility.ProtectedInternal, accessibility);
+            Assert.Equal(AccessibilityModifier.ProtectedInternal, accessibility);
         }
 
         [Fact]
@@ -297,7 +297,7 @@ namespace Apiview.Tests.Model
 
             var accessibility = new MetadataTypeDescription(symbol).Accessibility;
 
-            Assert.Equal(Accessibility.PrivateProtected, accessibility);
+            Assert.Equal(AccessibilityModifier.PrivateProtected, accessibility);
         }
 
         [Fact]
@@ -315,7 +315,7 @@ namespace Apiview.Tests.Model
 
             var accessibility = new MetadataTypeDescription(symbol).Accessibility;
 
-            Assert.Equal(Accessibility.Internal, accessibility);
+            Assert.Equal(AccessibilityModifier.Internal, accessibility);
         }
 
         [Fact]
@@ -333,7 +333,7 @@ namespace Apiview.Tests.Model
 
             var accessibility = new MetadataTypeDescription(symbol).Accessibility;
 
-            Assert.Equal(Accessibility.Private, accessibility);
+            Assert.Equal(AccessibilityModifier.Private, accessibility);
         }
 
         [Fact]

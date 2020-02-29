@@ -29,7 +29,7 @@ namespace Apiview.Tests.Model
         }
 
         [Fact]
-        public void AccessibilityPropertyReturnsUnknownForMissingTypes()
+        public void AccessibilityPropertyReturnsNullForMissingTypes()
         {
             var source = @"
             public class X
@@ -40,7 +40,7 @@ namespace Apiview.Tests.Model
 
             var accessibility = new MissingMetadataTypeDescription(symbol).Accessibility;
 
-            Assert.Equal(Apiview.Model.Accessibility.Unknown, accessibility);
+            Assert.Null(accessibility);
         }
 
         [Fact]

@@ -7,7 +7,7 @@ namespace Apiview.Model
     /// <summary>
     /// This enumeration describes the available accessibilities for code elements.
     /// </summary>
-    public enum Accessibility
+    public enum AccessibilityModifier
     {
         /// <summary>
         /// The code element is public.
@@ -38,10 +38,5 @@ namespace Apiview.Model
         /// The member is private.
         /// </summary>
         Private,
-
-        /// <summary>
-        /// The member has unknown accessibility.
-        /// </summary>
-        Unknown,
     }
 }

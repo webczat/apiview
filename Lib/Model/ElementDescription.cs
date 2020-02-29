@@ -36,15 +36,15 @@ namespace Apiview.Model
         /// Gets the element's accessibility.
         /// </summary>
         /// <value>The type's accessibility.</value>
-        public Accessibility Accessibility => this.Symbol.DeclaredAccessibility switch
+        public AccessibilityModifier? Accessibility => this.Symbol.DeclaredAccessibility switch
         {
-            Microsoft.CodeAnalysis.Accessibility.Public => Accessibility.Public,
-            Microsoft.CodeAnalysis.Accessibility.Protected => Accessibility.Protected,
-            Microsoft.CodeAnalysis.Accessibility.ProtectedOrInternal => Accessibility.ProtectedInternal,
-            Microsoft.CodeAnalysis.Accessibility.Internal => Accessibility.Internal,
-            Microsoft.CodeAnalysis.Accessibility.ProtectedAndInternal => Accessibility.PrivateProtected,
-            Microsoft.CodeAnalysis.Accessibility.Private => Accessibility.Private,
-            Microsoft.CodeAnalysis.Accessibility.NotApplicable => Accessibility.Unknown,
+            Microsoft.CodeAnalysis.Accessibility.Public => AccessibilityModifier.Public,
+            Microsoft.CodeAnalysis.Accessibility.Protected => AccessibilityModifier.Protected,
+            Microsoft.CodeAnalysis.Accessibility.ProtectedOrInternal => AccessibilityModifier.ProtectedInternal,
+            Microsoft.CodeAnalysis.Accessibility.Internal => AccessibilityModifier.Internal,
+            Microsoft.CodeAnalysis.Accessibility.ProtectedAndInternal => AccessibilityModifier.PrivateProtected,
+            Microsoft.CodeAnalysis.Accessibility.Private => AccessibilityModifier.Private,
+            Microsoft.CodeAnalysis.Accessibility.NotApplicable => null,
             _ => throw new NotImplementedException($"Type with unknown accessibility '{this.Symbol.DeclaredAccessibility}'")
         };
 

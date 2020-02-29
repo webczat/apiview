@@ -38,7 +38,7 @@ namespace Apiview.Model
         /// Gets a value indicating whether the type is generic.
         /// </summary>
         /// <value><c>true</c> when the type is generic.</value>
-        public bool IsGeneric => ((INamedTypeSymbol)this.Symbol).IsGenericType;
+        public bool IsGeneric => this.Symbol.IsGenericType;
 
         /// <summary>
         /// Gets a value indicating whether the type is static.
@@ -73,5 +73,11 @@ namespace Apiview.Model
             Microsoft.CodeAnalysis.Accessibility.NotApplicable => Accessibility.Unknown,
             _ => throw new NotImplementedException($"Type with unknown accessibility '{this.Symbol.DeclaredAccessibility}'")
         };
+
+        /// <summary>
+        /// Gets the symbol from base class downcasted to an instance of <see cref="INamedTypeSymbol"/>.
+        /// </summary>
+        /// <value>The symbol.</value>
+        protected new INamedTypeSymbol Symbol => (INamedTypeSymbol)base.Symbol;
     }
 }

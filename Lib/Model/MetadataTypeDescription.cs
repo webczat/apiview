@@ -11,19 +11,19 @@ namespace Apiview.Model
     /// <summary>
     /// Instances of this class describe an user defined named type, whether a class, struct, interface, enum or delegate.
     /// </summary>
-    public class TypeDescription
+    public class MetadataTypeDescription
     {
         // The underlying ISymbol describing the type
         private readonly INamedTypeSymbol symbol;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TypeDescription"/> class.
+        /// Initializes a new instance of the <see cref="MetadataTypeDescription"/> class.
         /// </summary>
         /// <param name="symbol">The wrapped roslyn symbol.</param>
-        public TypeDescription(INamedTypeSymbol symbol)
+        public MetadataTypeDescription(INamedTypeSymbol symbol)
         {
-            Debug.Assert(!(symbol is IErrorTypeSymbol), $"{nameof(TypeDescription)} does not support unresolved types");
-            Debug.Assert(!symbol.IsImplicitlyDeclared, $"{nameof(TypeDescription)} does not support compiler generated types");
+            Debug.Assert(!(symbol is IErrorTypeSymbol), $"{nameof(MetadataTypeDescription)} does not support unresolved types");
+            Debug.Assert(!symbol.IsImplicitlyDeclared, $"{nameof(MetadataTypeDescription)} does not support compiler generated types");
             this.symbol = symbol;
         }
 

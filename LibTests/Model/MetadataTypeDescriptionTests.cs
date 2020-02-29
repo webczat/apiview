@@ -8,9 +8,9 @@ using Xunit;
 namespace Apiview.Tests.Model
 {
     /// <summary>
-    /// Tests for a <see cref="TypeDescription"/> class.
+    /// Tests for a <see cref="MetadataTypeDescription"/> class.
     /// </summary>
-    public class TypeDescriptionTests : ModelTestBase
+    public class MetadataTypeDescriptionTests : ModelTestBase
     {
         [Fact]
         public void NamePropertyReturnsSimpleTypeNameWhenTypeNotGeneric()
@@ -25,7 +25,7 @@ namespace Apiview.Tests.Model
             ";
             var symbol = CreateCompilation(source).GetTypeByMetadataName("TestNamespace.TestType");
 
-            var name = new TypeDescription(symbol).Name;
+            var name = new MetadataTypeDescription(symbol).Name;
 
             Assert.Equal("TestType", name);
         }
@@ -43,7 +43,7 @@ namespace Apiview.Tests.Model
             ";
             var symbol = CreateCompilation(source).GetTypeByMetadataName("TestNamespace.TestType`2");
 
-            var name = new TypeDescription(symbol).Name;
+            var name = new MetadataTypeDescription(symbol).Name;
 
             Assert.Equal("TestType`2", name);
         }
@@ -58,7 +58,7 @@ namespace Apiview.Tests.Model
             ";
             var symbol = CreateCompilation(source).GetTypeByMetadataName("TestClass");
 
-            var value = new TypeDescription(symbol).IsAbstract;
+            var value = new MetadataTypeDescription(symbol).IsAbstract;
 
             Assert.True(value);
         }
@@ -73,7 +73,7 @@ namespace Apiview.Tests.Model
             ";
             var symbol = CreateCompilation(source).GetTypeByMetadataName("TestClass");
 
-            var value = new TypeDescription(symbol).IsAbstract;
+            var value = new MetadataTypeDescription(symbol).IsAbstract;
 
             Assert.False(value);
         }
@@ -88,7 +88,7 @@ namespace Apiview.Tests.Model
                     ";
             var symbol = CreateCompilation(source).GetTypeByMetadataName("TestClass");
 
-            var value = new TypeDescription(symbol).IsSealed;
+            var value = new MetadataTypeDescription(symbol).IsSealed;
 
             Assert.True(value);
         }
@@ -103,7 +103,7 @@ namespace Apiview.Tests.Model
                     ";
             var symbol = CreateCompilation(source).GetTypeByMetadataName("TestClass");
 
-            var value = new TypeDescription(symbol).IsSealed;
+            var value = new MetadataTypeDescription(symbol).IsSealed;
 
             Assert.False(value);
         }
@@ -118,7 +118,7 @@ namespace Apiview.Tests.Model
                             ";
             var symbol = CreateCompilation(source).GetTypeByMetadataName("TestClass`2");
 
-            var value = new TypeDescription(symbol).IsGeneric;
+            var value = new MetadataTypeDescription(symbol).IsGeneric;
 
             Assert.True(value);
         }
@@ -133,7 +133,7 @@ namespace Apiview.Tests.Model
                             ";
             var symbol = CreateCompilation(source).GetTypeByMetadataName("TestClass");
 
-            var value = new TypeDescription(symbol).IsGeneric;
+            var value = new MetadataTypeDescription(symbol).IsGeneric;
 
             Assert.False(value);
         }
@@ -148,7 +148,7 @@ namespace Apiview.Tests.Model
                                     ";
             var symbol = CreateCompilation(source).GetTypeByMetadataName("TestClass");
 
-            var value = new TypeDescription(symbol).IsStatic;
+            var value = new MetadataTypeDescription(symbol).IsStatic;
 
             Assert.True(value);
         }
@@ -163,7 +163,7 @@ namespace Apiview.Tests.Model
                                     ";
             var symbol = CreateCompilation(source).GetTypeByMetadataName("TestClass");
 
-            var value = new TypeDescription(symbol).IsStatic;
+            var value = new MetadataTypeDescription(symbol).IsStatic;
 
             Assert.False(value);
         }
@@ -178,7 +178,7 @@ namespace Apiview.Tests.Model
             ";
             var symbol = CreateCompilation(source).GetTypeByMetadataName("TestStruct");
 
-            var value = new TypeDescription(symbol).IsRefLike;
+            var value = new MetadataTypeDescription(symbol).IsRefLike;
 
             Assert.True(value);
         }
@@ -193,7 +193,7 @@ namespace Apiview.Tests.Model
             ";
             var symbol = CreateCompilation(source).GetTypeByMetadataName("TestStruct");
 
-            var value = new TypeDescription(symbol).IsRefLike;
+            var value = new MetadataTypeDescription(symbol).IsRefLike;
 
             Assert.False(value);
         }
@@ -208,7 +208,7 @@ namespace Apiview.Tests.Model
             ";
             var symbol = CreateCompilation(source).GetTypeByMetadataName("TestStruct");
 
-            var value = new TypeDescription(symbol).IsReadonly;
+            var value = new MetadataTypeDescription(symbol).IsReadonly;
 
             Assert.True(value);
         }
@@ -223,7 +223,7 @@ namespace Apiview.Tests.Model
             ";
             var symbol = CreateCompilation(source).GetTypeByMetadataName("TestStruct");
 
-            var value = new TypeDescription(symbol).IsReadonly;
+            var value = new MetadataTypeDescription(symbol).IsReadonly;
 
             Assert.False(value);
         }
@@ -241,7 +241,7 @@ namespace Apiview.Tests.Model
             ";
             var symbol = CreateCompilation(source).GetTypeByMetadataName("TestParent+TestClass");
 
-            var accessibility = new TypeDescription(symbol).Accessibility;
+            var accessibility = new MetadataTypeDescription(symbol).Accessibility;
 
             Assert.Equal(Accessibility.Public, accessibility);
         }
@@ -259,7 +259,7 @@ namespace Apiview.Tests.Model
             ";
             var symbol = CreateCompilation(source).GetTypeByMetadataName("TestContainer+TestClass");
 
-            var accessibility = new TypeDescription(symbol).Accessibility;
+            var accessibility = new MetadataTypeDescription(symbol).Accessibility;
 
             Assert.Equal(Accessibility.Protected, accessibility);
         }
@@ -277,7 +277,7 @@ namespace Apiview.Tests.Model
             ";
             var symbol = CreateCompilation(source).GetTypeByMetadataName("TestContainer+TestClass");
 
-            var accessibility = new TypeDescription(symbol).Accessibility;
+            var accessibility = new MetadataTypeDescription(symbol).Accessibility;
 
             Assert.Equal(Accessibility.ProtectedInternal, accessibility);
         }
@@ -295,7 +295,7 @@ namespace Apiview.Tests.Model
             ";
             var symbol = CreateCompilation(source).GetTypeByMetadataName("TestParent+TestClass");
 
-            var accessibility = new TypeDescription(symbol).Accessibility;
+            var accessibility = new MetadataTypeDescription(symbol).Accessibility;
 
             Assert.Equal(Accessibility.PrivateProtected, accessibility);
         }
@@ -313,7 +313,7 @@ namespace Apiview.Tests.Model
     ";
             var symbol = CreateCompilation(source).GetTypeByMetadataName("TestParent+TestClass");
 
-            var accessibility = new TypeDescription(symbol).Accessibility;
+            var accessibility = new MetadataTypeDescription(symbol).Accessibility;
 
             Assert.Equal(Accessibility.Internal, accessibility);
         }
@@ -331,7 +331,7 @@ namespace Apiview.Tests.Model
             ";
             var symbol = CreateCompilation(source).GetTypeByMetadataName("TestContainer+TestClass");
 
-            var accessibility = new TypeDescription(symbol).Accessibility;
+            var accessibility = new MetadataTypeDescription(symbol).Accessibility;
 
             Assert.Equal(Accessibility.Private, accessibility);
         }
@@ -346,7 +346,7 @@ namespace Apiview.Tests.Model
             ";
             var symbol = CreateCompilation(source).GetTypeByMetadataName("TestClass");
 
-            var kind = new TypeDescription(symbol).Kind;
+            var kind = new MetadataTypeDescription(symbol).Kind;
 
             Assert.Equal(TypeKind.Class, kind);
         }
@@ -361,7 +361,7 @@ namespace Apiview.Tests.Model
             ";
             var symbol = CreateCompilation(source).GetTypeByMetadataName("TestInterface");
 
-            var kind = new TypeDescription(symbol).Kind;
+            var kind = new MetadataTypeDescription(symbol).Kind;
 
             Assert.Equal(TypeKind.Interface, kind);
         }
@@ -376,7 +376,7 @@ namespace Apiview.Tests.Model
             ";
             var symbol = CreateCompilation(source).GetTypeByMetadataName("TestStruct");
 
-            var kind = new TypeDescription(symbol).Kind;
+            var kind = new MetadataTypeDescription(symbol).Kind;
 
             Assert.Equal(TypeKind.Struct, kind);
         }
@@ -391,7 +391,7 @@ namespace Apiview.Tests.Model
             ";
             var symbol = CreateCompilation(source).GetTypeByMetadataName("TestEnum");
 
-            var kind = new TypeDescription(symbol).Kind;
+            var kind = new MetadataTypeDescription(symbol).Kind;
 
             Assert.Equal(TypeKind.Enum, kind);
         }
@@ -404,7 +404,7 @@ namespace Apiview.Tests.Model
             ";
             var symbol = CreateCompilation(source).GetTypeByMetadataName("TestDelegate");
 
-            var kind = new TypeDescription(symbol).Kind;
+            var kind = new MetadataTypeDescription(symbol).Kind;
 
             Assert.Equal(TypeKind.Delegate, kind);
         }

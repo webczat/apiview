@@ -38,9 +38,9 @@
       },
       "Shouldly": {
         "type": "Direct",
-        "requested": "[3.0.2, )",
-        "resolved": "3.0.2",
-        "contentHash": "G3+8o4VlT1VsB6hs/ESSDqyLNNHVJuIKCfi/7Ix3mviuqNhOdHTdmJym+04+E3Pj//LmCEfJkOUDrAursHfYew==",
+        "requested": "[4.0.0-beta0002, )",
+        "resolved": "4.0.0-beta0002",
+        "contentHash": "TsFmVSCTkqebyh2UugMYF10Xm+RBTWuEss56ZTL1sOpTGE4qMjmkDqB/oUl/7iBB8QzBMeA2TcpP5HdRIMd5BQ==",
         "dependencies": {
           "Microsoft.CSharp": "4.3.0",
           "System.Dynamic.Runtime": "4.3.0",

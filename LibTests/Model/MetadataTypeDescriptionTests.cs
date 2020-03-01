@@ -426,5 +426,192 @@ namespace Apiview.Tests.Model
 
             _ = Assert.IsType<MetadataTypeDescription>(parent);
         }
+
+        [Fact]
+        public void BaseTypePropertyReturnsNullForSystemObject()
+        {
+            // Can we even fake System.Object? let's assume we can.
+            var source = @"
+            namespace System
+            {
+                public class Object
+                {
+                }
+            }
+            ";
+            var symbol = CreateCompilation(source).GetTypeByMetadataName("System.Object");
+
+            var baseType = new MetadataTypeDescription(symbol).BaseType;
+
+            Assert.Null(baseType);
+        }
+
+        [Fact]
+        public void BaseTypePropertyReturnsMetadataTypeDescriptionWhenBaseNotMissing()
+        {
+            var source = @"
+            public class TestBase
+            {
+            }
+
+            public class Test : TestBase
+            {
+            }
+            ";
+            var symbol = CreateCompilation(source).GetTypeByMetadataName("Test");
+
+            var baseType = new MetadataTypeDescription(symbol).BaseType;
+
+            _ = Assert.IsType<MetadataTypeDescription>(baseType);
+        }
+
+        [Fact]
+        public void BaseTypePropertyReturnsMissingMetadataTypeDescriptionWhenBaseMissing()
+        {
+            var source = @"
+            public class Test
+            {
+            }
+            ";
+            var symbol = CreateCompilation(source).GetTypeByMetadataName("Test");
+
+            var baseType = new MetadataTypeDescription(symbol).BaseType;
+
+            _ = Assert.IsType<MissingMetadataTypeDescription>(baseType);
+        }
+
+        [Fact]
+        public void BaseTypePropertyReturnsBaseTypeWithCorrectName()
+        {
+            var source = @"
+            public class TestBase
+            {
+            }
+
+            public class Test : TestBase
+            {
+            }
+            ";
+            var symbol = CreateCompilation(source).GetTypeByMetadataName("Test");
+
+            var baseTypeName = new MetadataTypeDescription(symbol).BaseType!.Name;
+
+            Assert.Equal("TestBase", baseTypeName);
+        }
+
+        [Fact]
+        public void InterfacesPropertyReturnsEmptyArrayWhenNoInterfacesImplemented()
+        {
+            var source = @"
+            public class Test
+            {
+            }
+            ";
+            var symbol = CreateCompilation(source).GetTypeByMetadataName("Test");
+
+            var interfaces = new MetadataTypeDescription(symbol).Interfaces;
+
+            Assert.Empty(interfaces);
+        }
+
+        [Fact]
+        public void InterfacesPropertyReturnsArrayWithOneElementWhenTypeImplementsOneInterface()
+        {
+            var source = @"
+            public interface TestInterface
+            {
+            }
+
+            public class Test : TestInterface
+            {
+            }
+            ";
+            var symbol = CreateCompilation(source).GetTypeByMetadataName("Test");
+
+            var interfaces = new MetadataTypeDescription(symbol).Interfaces;
+
+            _ = Assert.Single(interfaces);
+        }
+
+        [Fact]
+        public void InterfacesPropertyReturnsArrayWithTwoElementsWhenTypeImplementsTwoInterfaces()
+        {
+            var source = @"
+            public interface TestInterface1
+            {
+            }
+
+            public interface TestInterface2
+            {
+            }
+
+            public class Test : TestInterface1, TestInterface2
+            {
+            }
+            ";
+            var symbol = CreateCompilation(source).GetTypeByMetadataName("Test");
+
+            var interfaces = new MetadataTypeDescription(symbol).Interfaces;
+
+            Assert.Equal(2, interfaces.Length);
+        }
+
+        [Fact]
+        public void InterfacesPropertyReturnsCorrectInterfaceName()
+        {
+            var source = @"
+            public interface TestInterface
+            {
+            }
+
+            public class Test : TestInterface
+            {
+            }
+            ";
+            var symbol = CreateCompilation(source).GetTypeByMetadataName("Test");
+
+            var interfaces = new MetadataTypeDescription(symbol).Interfaces;
+
+            Assert.Equal("TestInterface", interfaces[0].Name);
+        }
+
+        [Fact]
+        public void InterfacesPropertyReturnsMetadataTypeDescriptionWhenInterfaceNotMissing()
+        {
+            var source = @"
+            public interface TestInterface
+            {
+            }
+
+            public class Test : TestInterface
+            {
+            }
+            ";
+            var symbol = CreateCompilation(source).GetTypeByMetadataName("Test");
+
+            var interfaces = new MetadataTypeDescription(symbol).Interfaces;
+
+            _ = Assert.IsType<MetadataTypeDescription>(interfaces[0]);
+        }
+
+        [Fact]
+        public void InterfacePropertyReturnsMissingMetadataTypeDescriptionWhenInterfaceMissing()
+        {
+            // Make a class with explicit base class and one interface, that makes things less ambiguous and will result in an error type in place of interface.
+            var source = @"
+            public class TestBase
+            {
+            }
+
+            public class Test : TestBase, TestInterface
+            {
+            }
+            ";
+            var symbol = CreateCompilation(source).GetTypeByMetadataName("Test");
+
+            var interfaces = new MetadataTypeDescription(symbol).Interfaces;
+
+            _ = Assert.IsType<MissingMetadataTypeDescription>(interfaces[0]);
+        }
     }
 }

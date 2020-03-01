@@ -4,6 +4,7 @@
 
 using Apiview.Model;
 using Microsoft.CodeAnalysis;
+using Shouldly;
 using Xunit;
 
 namespace Apiview.Tests.Model
@@ -21,7 +22,7 @@ namespace Apiview.Tests.Model
 
             var name = new MissingMetadataTypeDescription(symbol).Name;
 
-            Assert.Equal("Test", name);
+            name.ShouldBe("Test");
         }
 
         [Fact]
@@ -32,7 +33,7 @@ namespace Apiview.Tests.Model
 
             var name = new MissingMetadataTypeDescription(symbol).Name;
 
-            Assert.Equal("Test`1", name);
+            name.ShouldBe("Test`1");
         }
 
         [Fact]
@@ -43,7 +44,7 @@ namespace Apiview.Tests.Model
 
             var accessibility = new MissingMetadataTypeDescription(symbol).Accessibility;
 
-            Assert.Null(accessibility);
+            accessibility.ShouldBeNull();
         }
 
         [Fact]
@@ -54,7 +55,7 @@ namespace Apiview.Tests.Model
 
             var kind = new MissingMetadataTypeDescription(symbol).Kind;
 
-            Assert.Equal(Apiview.Model.TypeKind.Missing, kind);
+            kind.ShouldBe(Apiview.Model.TypeKind.Missing);
         }
 
         [Fact]
@@ -73,7 +74,7 @@ namespace Apiview.Tests.Model
 
             var parent = new MissingMetadataTypeDescription(symbol).Parent;
 
-            _ = Assert.IsType<MetadataTypeDescription>(parent);
+            _ = parent.ShouldBeOfType<MetadataTypeDescription>();
         }
 
         [Fact]
@@ -85,7 +86,7 @@ namespace Apiview.Tests.Model
 
             var parent = new MissingMetadataTypeDescription(symbol).Parent;
 
-            _ = Assert.IsType<MissingMetadataTypeDescription>(parent);
+            _ = parent.ShouldBeOfType<MissingMetadataTypeDescription>();
         }
     }
 }

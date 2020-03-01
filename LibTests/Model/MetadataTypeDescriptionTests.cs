@@ -3,6 +3,7 @@
 // This file is licensed under the BSD-2-Clause license, see 'LICENSE' file in source root for more details.
 
 using Apiview.Model;
+using Shouldly;
 using Xunit;
 
 namespace Apiview.Tests.Model
@@ -27,7 +28,7 @@ namespace Apiview.Tests.Model
 
             var name = new MetadataTypeDescription(symbol).Name;
 
-            Assert.Equal("TestType", name);
+            name.ShouldBe("TestType");
         }
 
         [Fact]
@@ -45,7 +46,7 @@ namespace Apiview.Tests.Model
 
             var name = new MetadataTypeDescription(symbol).Name;
 
-            Assert.Equal("TestType`2", name);
+            name.ShouldBe("TestType`2");
         }
 
         [Fact]
@@ -60,7 +61,7 @@ namespace Apiview.Tests.Model
 
             var value = new MetadataTypeDescription(symbol).IsAbstract;
 
-            Assert.True(value);
+            value.ShouldBeTrue();
         }
 
         [Fact]
@@ -75,7 +76,7 @@ namespace Apiview.Tests.Model
 
             var value = new MetadataTypeDescription(symbol).IsAbstract;
 
-            Assert.False(value);
+            value.ShouldBeFalse();
         }
 
         [Fact]
@@ -90,7 +91,7 @@ namespace Apiview.Tests.Model
 
             var value = new MetadataTypeDescription(symbol).IsSealed;
 
-            Assert.True(value);
+            value.ShouldBeTrue();
         }
 
         [Fact]
@@ -105,7 +106,7 @@ namespace Apiview.Tests.Model
 
             var value = new MetadataTypeDescription(symbol).IsSealed;
 
-            Assert.False(value);
+            value.ShouldBeFalse();
         }
 
         [Fact]
@@ -120,7 +121,7 @@ namespace Apiview.Tests.Model
 
             var value = new MetadataTypeDescription(symbol).IsGeneric;
 
-            Assert.True(value);
+            value.ShouldBeTrue();
         }
 
         [Fact]
@@ -135,7 +136,7 @@ namespace Apiview.Tests.Model
 
             var value = new MetadataTypeDescription(symbol).IsGeneric;
 
-            Assert.False(value);
+            value.ShouldBeFalse();
         }
 
         [Fact]
@@ -150,7 +151,7 @@ namespace Apiview.Tests.Model
 
             var value = new MetadataTypeDescription(symbol).IsStatic;
 
-            Assert.True(value);
+            value.ShouldBeTrue();
         }
 
         [Fact]
@@ -165,7 +166,7 @@ namespace Apiview.Tests.Model
 
             var value = new MetadataTypeDescription(symbol).IsStatic;
 
-            Assert.False(value);
+            value.ShouldBeFalse();
         }
 
         [Fact]
@@ -180,7 +181,7 @@ namespace Apiview.Tests.Model
 
             var value = new MetadataTypeDescription(symbol).IsRefLike;
 
-            Assert.True(value);
+            value.ShouldBeTrue();
         }
 
         [Fact]
@@ -195,7 +196,7 @@ namespace Apiview.Tests.Model
 
             var value = new MetadataTypeDescription(symbol).IsRefLike;
 
-            Assert.False(value);
+            value.ShouldBeFalse();
         }
 
         [Fact]
@@ -210,7 +211,7 @@ namespace Apiview.Tests.Model
 
             var value = new MetadataTypeDescription(symbol).IsReadonly;
 
-            Assert.True(value);
+            value.ShouldBeTrue();
         }
 
         [Fact]
@@ -225,7 +226,7 @@ namespace Apiview.Tests.Model
 
             var value = new MetadataTypeDescription(symbol).IsReadonly;
 
-            Assert.False(value);
+            value.ShouldBeFalse();
         }
 
         [Fact]
@@ -243,7 +244,7 @@ namespace Apiview.Tests.Model
 
             var accessibility = new MetadataTypeDescription(symbol).Accessibility;
 
-            Assert.Equal(AccessibilityModifier.Public, accessibility);
+            accessibility.ShouldBe(AccessibilityModifier.Public);
         }
 
         [Fact]
@@ -261,7 +262,7 @@ namespace Apiview.Tests.Model
 
             var accessibility = new MetadataTypeDescription(symbol).Accessibility;
 
-            Assert.Equal(AccessibilityModifier.Protected, accessibility);
+            accessibility.ShouldBe(AccessibilityModifier.Protected);
         }
 
         [Fact]
@@ -279,7 +280,7 @@ namespace Apiview.Tests.Model
 
             var accessibility = new MetadataTypeDescription(symbol).Accessibility;
 
-            Assert.Equal(AccessibilityModifier.ProtectedInternal, accessibility);
+            accessibility.ShouldBe(AccessibilityModifier.ProtectedInternal);
         }
 
         [Fact]
@@ -297,7 +298,7 @@ namespace Apiview.Tests.Model
 
             var accessibility = new MetadataTypeDescription(symbol).Accessibility;
 
-            Assert.Equal(AccessibilityModifier.PrivateProtected, accessibility);
+            accessibility.ShouldBe(AccessibilityModifier.PrivateProtected);
         }
 
         [Fact]
@@ -315,7 +316,7 @@ namespace Apiview.Tests.Model
 
             var accessibility = new MetadataTypeDescription(symbol).Accessibility;
 
-            Assert.Equal(AccessibilityModifier.Internal, accessibility);
+            accessibility.ShouldBe(AccessibilityModifier.Internal);
         }
 
         [Fact]
@@ -333,7 +334,7 @@ namespace Apiview.Tests.Model
 
             var accessibility = new MetadataTypeDescription(symbol).Accessibility;
 
-            Assert.Equal(AccessibilityModifier.Private, accessibility);
+            accessibility.ShouldBe(AccessibilityModifier.Private);
         }
 
         [Fact]
@@ -348,7 +349,7 @@ namespace Apiview.Tests.Model
 
             var kind = new MetadataTypeDescription(symbol).Kind;
 
-            Assert.Equal(TypeKind.Class, kind);
+            kind.ShouldBe(TypeKind.Class);
         }
 
         [Fact]
@@ -363,7 +364,7 @@ namespace Apiview.Tests.Model
 
             var kind = new MetadataTypeDescription(symbol).Kind;
 
-            Assert.Equal(TypeKind.Interface, kind);
+            kind.ShouldBe(TypeKind.Interface);
         }
 
         [Fact]
@@ -378,7 +379,7 @@ namespace Apiview.Tests.Model
 
             var kind = new MetadataTypeDescription(symbol).Kind;
 
-            Assert.Equal(TypeKind.Struct, kind);
+            kind.ShouldBe(TypeKind.Struct);
         }
 
         [Fact]
@@ -393,7 +394,7 @@ namespace Apiview.Tests.Model
 
             var kind = new MetadataTypeDescription(symbol).Kind;
 
-            Assert.Equal(TypeKind.Enum, kind);
+            kind.ShouldBe(TypeKind.Enum);
         }
 
         [Fact]
@@ -406,7 +407,7 @@ namespace Apiview.Tests.Model
 
             var kind = new MetadataTypeDescription(symbol).Kind;
 
-            Assert.Equal(TypeKind.Delegate, kind);
+            kind.ShouldBe(TypeKind.Delegate);
         }
 
         [Fact]
@@ -424,7 +425,7 @@ namespace Apiview.Tests.Model
 
             var parent = new MetadataTypeDescription(symbol).Parent;
 
-            _ = Assert.IsType<MetadataTypeDescription>(parent);
+            _ = parent.ShouldBeOfType<MetadataTypeDescription>();
         }
 
         [Fact]
@@ -443,7 +444,7 @@ namespace Apiview.Tests.Model
 
             var baseType = new MetadataTypeDescription(symbol).BaseType;
 
-            Assert.Null(baseType);
+            baseType.ShouldBeNull();
         }
 
         [Fact]
@@ -462,7 +463,7 @@ namespace Apiview.Tests.Model
 
             var baseType = new MetadataTypeDescription(symbol).BaseType;
 
-            _ = Assert.IsType<MetadataTypeDescription>(baseType);
+            _ = baseType.ShouldBeOfType<MetadataTypeDescription>();
         }
 
         [Fact]
@@ -477,7 +478,7 @@ namespace Apiview.Tests.Model
 
             var baseType = new MetadataTypeDescription(symbol).BaseType;
 
-            _ = Assert.IsType<MissingMetadataTypeDescription>(baseType);
+            _ = baseType.ShouldBeOfType<MissingMetadataTypeDescription>();
         }
 
         [Fact]
@@ -496,7 +497,7 @@ namespace Apiview.Tests.Model
 
             var baseTypeName = new MetadataTypeDescription(symbol).BaseType!.Name;
 
-            Assert.Equal("TestBase", baseTypeName);
+            baseTypeName.ShouldBe("TestBase");
         }
 
         [Fact]
@@ -511,7 +512,7 @@ namespace Apiview.Tests.Model
 
             var interfaces = new MetadataTypeDescription(symbol).Interfaces;
 
-            Assert.Empty(interfaces);
+            interfaces.ShouldBeEmpty();
         }
 
         [Fact]
@@ -530,7 +531,7 @@ namespace Apiview.Tests.Model
 
             var interfaces = new MetadataTypeDescription(symbol).Interfaces;
 
-            _ = Assert.Single(interfaces);
+            interfaces.Length.ShouldBe(1);
         }
 
         [Fact]
@@ -553,7 +554,7 @@ namespace Apiview.Tests.Model
 
             var interfaces = new MetadataTypeDescription(symbol).Interfaces;
 
-            Assert.Equal(2, interfaces.Length);
+            interfaces.Length.ShouldBe(2);
         }
 
         [Fact]
@@ -572,7 +573,7 @@ namespace Apiview.Tests.Model
 
             var interfaces = new MetadataTypeDescription(symbol).Interfaces;
 
-            Assert.Equal("TestInterface", interfaces[0].Name);
+            interfaces[0].Name.ShouldBe("TestInterface");
         }
 
         [Fact]
@@ -591,7 +592,7 @@ namespace Apiview.Tests.Model
 
             var interfaces = new MetadataTypeDescription(symbol).Interfaces;
 
-            _ = Assert.IsType<MetadataTypeDescription>(interfaces[0]);
+            _ = interfaces[0].ShouldBeOfType<MetadataTypeDescription>();
         }
 
         [Fact]
@@ -611,7 +612,7 @@ namespace Apiview.Tests.Model
 
             var interfaces = new MetadataTypeDescription(symbol).Interfaces;
 
-            _ = Assert.IsType<MissingMetadataTypeDescription>(interfaces[0]);
+            _ = interfaces[0].ShouldBeOfType<MissingMetadataTypeDescription>();
         }
     }
 }

@@ -15,5 +15,6 @@
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1"/>
     <PackageReference Include="XUnit.Analyzers" Version="0.10.0"/>
     <PackageReference Include="coverlet.collector" Version="1.2.0"/>
+    <PackageReference Include="shouldly" Version="3.0.2"/>
   </ItemGroup>
 </Project>

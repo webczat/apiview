@@ -16,22 +16,17 @@ namespace Apiview.Tests.Model
         [Fact]
         public void NamePropertyReturnsNameWithoutArityForMissingNonGenericTypes()
         {
-            var source = @"
-            public class X
-            {
-            }
-            ";
-            var symbol = (IErrorTypeSymbol)(CreateCompilation(source).GetTypeByMetadataName("X").BaseType!);
+            var compilation = CreateCompilation(string.Empty);
+            var symbol = (IErrorTypeSymbol)compilation.CreateErrorTypeSymbol(compilation.GlobalNamespace, "Test", 0);
 
             var name = new MissingMetadataTypeDescription(symbol).Name;
 
-            Assert.Equal("Object", name);
+            Assert.Equal("Test", name);
         }
 
         [Fact]
         public void NamePropertyReturnsNameWithArityForMissingGenericTypes()
         {
-            // Empty source, we create the error type symbol without any text.
             var compilation = CreateCompilation(string.Empty);
             var symbol = (IErrorTypeSymbol)compilation.CreateErrorTypeSymbol(compilation.GlobalNamespace, "Test", 1);
 
@@ -43,12 +38,8 @@ namespace Apiview.Tests.Model
         [Fact]
         public void AccessibilityPropertyReturnsNullForMissingTypes()
         {
-            var source = @"
-            public class X
-            {
-            }
-            ";
-            var symbol = (IErrorTypeSymbol)(CreateCompilation(source).GetTypeByMetadataName("X").BaseType!);
+            var compilation = CreateCompilation(string.Empty);
+            var symbol = (IErrorTypeSymbol)compilation.CreateErrorTypeSymbol(compilation.GlobalNamespace, "Test", 0);
 
             var accessibility = new MissingMetadataTypeDescription(symbol).Accessibility;
 
@@ -58,12 +49,8 @@ namespace Apiview.Tests.Model
         [Fact]
         public void KindPropertyReturnsMissingForMissingTypes()
         {
-            var source = @"
-            public class X
-            {
-            }
-            ";
-            var symbol = (IErrorTypeSymbol)(CreateCompilation(source).GetTypeByMetadataName("X").BaseType!);
+            var compilation = CreateCompilation(string.Empty);
+            var symbol = (IErrorTypeSymbol)compilation.CreateErrorTypeSymbol(compilation.GlobalNamespace, "Test", 0);
 
             var kind = new MissingMetadataTypeDescription(symbol).Kind;
 

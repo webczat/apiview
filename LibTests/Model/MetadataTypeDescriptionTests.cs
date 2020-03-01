@@ -337,7 +337,7 @@ namespace Apiview.Tests.Model
         }
 
         [Fact]
-        public void KindReturnsClassWhenTypeIsClass()
+        public void KindPropertyReturnsClassWhenTypeIsClass()
         {
             var source = @"
             class TestClass

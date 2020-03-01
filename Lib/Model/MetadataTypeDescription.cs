@@ -2,6 +2,7 @@
 // All rights reserved.
 // This file is licensed under the BSD-2-Clause license, see 'LICENSE' file in source root for more details.
 
+using System.Diagnostics;
 using Microsoft.CodeAnalysis;
 
 namespace Apiview.Model
@@ -18,6 +19,8 @@ namespace Apiview.Model
         public MetadataTypeDescription(INamedTypeSymbol symbol)
             : base(symbol)
         {
+            // This constructor can be called only for INamedTypeSymbols proper, unless it is itself a subclass.
+            Debug.Assert(GetType() != typeof(MetadataTypeDescription) || this.Symbol is INamedTypeSymbol);
         }
 
         /// <summary>

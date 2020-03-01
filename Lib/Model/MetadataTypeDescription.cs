@@ -20,7 +20,7 @@ namespace Apiview.Model
             : base(symbol)
         {
             // This constructor can be called only for INamedTypeSymbols proper, unless it is itself a subclass.
-            Debug.Assert(GetType() != typeof(MetadataTypeDescription) || this.Symbol is INamedTypeSymbol);
+            Debug.Assert(this.GetType() != typeof(MetadataTypeDescription) || this.Symbol is INamedTypeSymbol, $"Cannot pass a symbol of type {this.Symbol.TypeKind} directly to {nameof(MetadataTypeDescription)}");
         }
 
         /// <summary>

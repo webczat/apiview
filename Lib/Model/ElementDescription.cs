@@ -21,6 +21,14 @@ namespace Apiview.Model
         {
             Debug.Assert(!symbol.IsImplicitlyDeclared, $"{nameof(ElementDescription)} does not support compiler generated types");
             this.Symbol = symbol;
+
+            // Initialize parent element based on underlying symbol.
+            this.Parent = this.Symbol.ContainingSymbol switch
+            {
+                IErrorTypeSymbol e => new MissingMetadataTypeDescription(e),
+                INamedTypeSymbol n => new MetadataTypeDescription(n),
+                _ => null,
+            };
         }
 
         /// <summary>
@@ -47,6 +55,19 @@ namespace Apiview.Model
             Microsoft.CodeAnalysis.Accessibility.NotApplicable => null,
             _ => throw new NotImplementedException($"Type with unknown accessibility '{this.Symbol.DeclaredAccessibility}'")
         };
+
+        /// <summary>
+        /// Gets the parent element of this element.
+        /// </summary>
+        /// <remarks>
+        /// <para>For any element, the parent element is the element that directly contains this one.</para>
+        /// <para>For many kinds of elements, the parent is a type or namespace.</para>
+        /// </remarks>
+        /// <value>The parent of current element, or <c>null</c> if it has no parent.</value>
+        public ElementDescription? Parent
+        {
+            get;
+        }
 
         /// <summary>
         /// Gets the wrapped symbol.

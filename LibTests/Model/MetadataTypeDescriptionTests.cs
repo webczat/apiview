@@ -408,5 +408,23 @@ namespace Apiview.Tests.Model
 
             Assert.Equal(TypeKind.Delegate, kind);
         }
+
+        [Fact]
+        public void ParentPropertyReturnsMetadataTypeDescriptionWhenParentIsType()
+        {
+            var source = @"
+            class Test
+            {
+                class Test2
+                {
+                }
+            }
+            ";
+            var symbol = CreateCompilation(source).GetTypeByMetadataName("Test+Test2");
+
+            var parent = new MetadataTypeDescription(symbol).Parent;
+
+            _ = Assert.IsType<MetadataTypeDescription>(parent);
+        }
     }
 }

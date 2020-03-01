@@ -14,7 +14,7 @@ namespace Apiview.Tests.Model
     public class MissingMetadataTypeDescriptionTests : ModelTestBase
     {
         [Fact]
-        public void NamePropertyReturnsNameForMissingTypes()
+        public void NamePropertyReturnsNameWithoutArityForMissingNonGenericTypes()
         {
             var source = @"
             public class X
@@ -26,6 +26,18 @@ namespace Apiview.Tests.Model
             var name = new MissingMetadataTypeDescription(symbol).Name;
 
             Assert.Equal("Object", name);
+        }
+
+        [Fact]
+        public void NamePropertyReturnsNameWithArityForMissingGenericTypes()
+        {
+            // Empty source, we create the error type symbol without any text.
+            var compilation = CreateCompilation(string.Empty);
+            var symbol = (IErrorTypeSymbol)compilation.CreateErrorTypeSymbol(compilation.GlobalNamespace, "Test", 1);
+
+            var name = new MissingMetadataTypeDescription(symbol).Name;
+
+            Assert.Equal("Test`1", name);
         }
 
         [Fact]
@@ -56,6 +68,37 @@ namespace Apiview.Tests.Model
             var kind = new MissingMetadataTypeDescription(symbol).Kind;
 
             Assert.Equal(Apiview.Model.TypeKind.Missing, kind);
+        }
+
+        [Fact]
+        public void ParentPropertyReturnsMetadataTypeDescriptionForMissingTypesContainedInOtherNonMissingTypes()
+        {
+            var source = @"
+            public class TestContainer
+            {
+            }
+            ";
+
+            // To create a missing type with Test type as parent, we have to use CreateErrorTypeSymbol method, to wrap it.
+            var compilation = CreateCompilation(source);
+            var baseSymbol = compilation.GetTypeByMetadataName("TestContainer");
+            var symbol = (IErrorTypeSymbol)compilation.CreateErrorTypeSymbol(baseSymbol, "Test", 0);
+
+            var parent = new MissingMetadataTypeDescription(symbol).Parent;
+
+            _ = Assert.IsType<MetadataTypeDescription>(parent);
+        }
+
+        [Fact]
+        public void ParentPropertyReturnsMissingMetadataTypeDescriptionForMissingTypesContainedInOtherMissingTypes()
+        {
+            var compilation = CreateCompilation(string.Empty);
+            var symbol = (IErrorTypeSymbol)compilation.CreateErrorTypeSymbol(compilation.GlobalNamespace, "TestBase", 0);
+            symbol = (IErrorTypeSymbol)compilation.CreateErrorTypeSymbol(symbol, "Test", 0);
+
+            var parent = new MissingMetadataTypeDescription(symbol).Parent;
+
+            _ = Assert.IsType<MissingMetadataTypeDescription>(parent);
         }
     }
 }

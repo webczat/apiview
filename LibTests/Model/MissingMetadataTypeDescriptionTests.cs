@@ -12,7 +12,7 @@ namespace Apiview.Tests.Model
     /// <summary>
     /// Tests for <see cref="MissingMetadataTypeDescription"/> class.
     /// </summary>
-    public class MissingMetadataTypeDescriptionTests : ModelTestBase
+    public class MissingMetadataTypeDescriptionTests : TestBase
     {
         [Fact]
         public void NamePropertyReturnsNameWithoutArityForMissingNonGenericTypes()

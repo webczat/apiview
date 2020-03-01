@@ -11,7 +11,7 @@ namespace Apiview.Tests.Model
     /// <summary>
     /// Tests for a <see cref="MetadataTypeDescription"/> class.
     /// </summary>
-    public class MetadataTypeDescriptionTests : ModelTestBase
+    public class MetadataTypeDescriptionTests : TestBase
     {
         [Fact]
         public void NamePropertyReturnsSimpleTypeNameWhenTypeNotGeneric()

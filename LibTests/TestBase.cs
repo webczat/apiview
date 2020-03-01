@@ -6,17 +6,17 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace Apiview.Tests.Model
+namespace Apiview.Tests
 {
     /// <summary>
     /// This class serves as a base for all tests of the model.
     /// </summary>
-    public class ModelTestBase
+    public class TestBase
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ModelTestBase"/> class.
+        /// Initializes a new instance of the <see cref="TestBase"/> class.
         /// </summary>
-        protected ModelTestBase()
+        protected TestBase()
         {
         }
 

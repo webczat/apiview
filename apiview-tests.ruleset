@@ -7,4 +7,7 @@
   <Rules AnalyzerId="Microsoft.CodeAnalysis.CSharp" RuleNamespace="Microsoft.CodeAnalysis.CSharp">
     <Rule Id="CS1591" Action="Hidden"/>
   </Rules>
+  <Rules AnalyzerId="Microsoft.CodeAnalysis.FXCopAnalyzers" RuleNamespace="Microsoft.CodeAnalysis.FXCopAnalyzers">
+    <Rule Id="CA2007" Action="Hidden"/>
+  </Rules>
 </RuleSet>

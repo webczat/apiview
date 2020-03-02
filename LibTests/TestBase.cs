@@ -4,6 +4,7 @@
 
 using System.Collections.Immutable;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -12,11 +13,12 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace Apiview.Tests
 {
     /// <summary>
-    /// This class serves as a base for all tests of the model.
+    /// This class serves as a base for all tests.
     /// </summary>
     public class TestBase
     {
-        protected static readonly MetadataReference BaseMetadata = MetadataReference.CreateFromFile(typeof(object).Assembly.Location);
+        protected static readonly ImmutableArray<byte> BaseMetadataImage = ImmutableArray.Create(File.ReadAllBytes(typeof(object).Assembly.Location));
+        protected static readonly MetadataReference BaseMetadata = MetadataReference.CreateFromImage(BaseMetadataImage, MetadataReferenceProperties.Assembly, null, typeof(object).Assembly.Location);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TestBase"/> class.
@@ -50,11 +52,13 @@ namespace Apiview.Tests
         /// </summary>
         /// <param name="source">The source fragment to compile, or null for empty assembly.</param>
         /// <param name="assemblyName">The assembly name to compile.</param>
-        /// <param name="references">References to other assemblies or compilations. Note that a reference to an assembly containing <c>System.Object</c> is always added.</param>
+        /// <param name="assemblies">References to other assemblies. Note that a reference to an assembly containing <c>System.Object</c> is always added.</param>
         /// <exception cref="EmitException">Thrown when assembly emitting fails.</exception>
         /// <returns>The compiled assembly as an immutable byte array.</returns>
-        protected static ImmutableArray<byte> CompileAssembly(string? source = null, string assemblyName = "TestAssembly", params MetadataReference[] references)
+        protected static ImmutableArray<byte> CompileAssembly(string? source = null, string assemblyName = "TestAssembly", params ImmutableArray<byte>[] assemblies)
         {
+            var references = from a in assemblies
+                             select MetadataReference.CreateFromImage(a, MetadataReferenceProperties.Assembly);
             var compilation = CreateCompilation(source, assemblyName).AddReferences(references).AddReferences(BaseMetadata);
             using var str = new MemoryStream();
             var result = compilation.Emit(str);
@@ -79,6 +83,8 @@ namespace Apiview.Tests
                 _ = builder.AddAssembly(assembly);
             }
 
+            // We should actually add the assembly containing System.Object and other fundamentals.
+            _ = builder.AddAssembly(BaseMetadataImage);
             return await builder.BuildAsync();
         }
 

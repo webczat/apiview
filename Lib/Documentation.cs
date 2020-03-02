@@ -29,7 +29,7 @@ namespace Apiview
             var compilation = CSharpCompilation.Create(null);
             foreach (var assembly in assemblies)
             {
-                compilation = compilation.AddReferences(MetadataReference.CreateFromImage(assembly));
+                compilation = compilation.AddReferences(MetadataReference.CreateFromImage(assembly, MetadataReferenceProperties.Assembly));
             }
 
             this.Compilation = compilation;

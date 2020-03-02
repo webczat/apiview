@@ -2,6 +2,7 @@
 // All rights reserved.
 // This file is licensed under the BSD-2-Clause license, see 'LICENSE' file in source root for more details.
 
+using System.Threading.Tasks;
 using Apiview.Model;
 using Shouldly;
 using Xunit;
@@ -11,10 +12,10 @@ namespace Apiview.Tests.Model
     /// <summary>
     /// Tests for a <see cref="MetadataTypeDescription"/> class.
     /// </summary>
-    public class MetadataTypeDescriptionTests : TestBase
+    public class MetadataTypeDescriptionTests : ModelTestBase
     {
         [Fact]
-        public void NamePropertyReturnsSimpleTypeNameWhenTypeNotGeneric()
+        public async Task NamePropertyReturnsSimpleTypeNameWhenTypeNotGeneric()
         {
             var source = @"
             namespace TestNamespace
@@ -23,16 +24,16 @@ namespace Apiview.Tests.Model
                 {
                 }
             }
-            ";
-            var symbol = CreateCompilation(source).GetTypeByMetadataName("TestNamespace.TestType");
+        ";
+            var type = await RetrieveTypeFromSourceFragmentAsync(source, "TestNamespace.TestType");
 
-            var name = new MetadataTypeDescription(symbol).Name;
+            var name = type.Name;
 
             name.ShouldBe("TestType");
         }
 
         [Fact]
-        public void NamePropertyReturnsSimpleTypeNameWithNumberOfTypeParametersWhenTypeGeneric()
+        public async Task NamePropertyReturnsSimpleTypeNameWithNumberOfTypeParametersWhenTypeGeneric()
         {
             var source = @"
             namespace TestNamespace
@@ -42,195 +43,195 @@ namespace Apiview.Tests.Model
                 }
             }
             ";
-            var symbol = CreateCompilation(source).GetTypeByMetadataName("TestNamespace.TestType`2");
+            var type = await RetrieveTypeFromSourceFragmentAsync(source, "TestNamespace.TestType`2");
 
-            var name = new MetadataTypeDescription(symbol).Name;
+            var name = type.Name;
 
             name.ShouldBe("TestType`2");
         }
 
         [Fact]
-        public void IsAbstractReturnsTrueWhenTypeAbstract()
+        public async Task IsAbstractReturnsTrueWhenTypeAbstract()
         {
             var source = @"
             abstract class TestClass
             {
             }
             ";
-            var symbol = CreateCompilation(source).GetTypeByMetadataName("TestClass");
+            var type = await RetrieveTypeFromSourceFragmentAsync(source, "TestClass");
 
-            var value = new MetadataTypeDescription(symbol).IsAbstract;
+            var value = type.IsAbstract;
 
             value.ShouldBeTrue();
         }
 
         [Fact]
-        public void IsAbstractReturnsFalseWhenTypeNotAbstract()
+        public async Task IsAbstractReturnsFalseWhenTypeNotAbstract()
         {
             var source = @"
             class TestClass
             {
             }
             ";
-            var symbol = CreateCompilation(source).GetTypeByMetadataName("TestClass");
+            var type = await RetrieveTypeFromSourceFragmentAsync(source, "TestClass");
 
-            var value = new MetadataTypeDescription(symbol).IsAbstract;
+            var value = type.IsAbstract;
 
             value.ShouldBeFalse();
         }
 
         [Fact]
-        public void IsSealedReturnsTrueWhenTypeSealed()
+        public async Task IsSealedReturnsTrueWhenTypeSealed()
         {
             var source = @"
                     sealed class TestClass
                     {
                     }
                     ";
-            var symbol = CreateCompilation(source).GetTypeByMetadataName("TestClass");
+            var type = await RetrieveTypeFromSourceFragmentAsync(source, "TestClass");
 
-            var value = new MetadataTypeDescription(symbol).IsSealed;
+            var value = type.IsSealed;
 
             value.ShouldBeTrue();
         }
 
         [Fact]
-        public void IsSealedReturnsFalseWhenTypeNotSealed()
+        public async Task IsSealedReturnsFalseWhenTypeNotSealed()
         {
             var source = @"
                     class TestClass
                     {
                     }
                     ";
-            var symbol = CreateCompilation(source).GetTypeByMetadataName("TestClass");
+            var type = await RetrieveTypeFromSourceFragmentAsync(source, "TestClass");
 
-            var value = new MetadataTypeDescription(symbol).IsSealed;
+            var value = type.IsSealed;
 
             value.ShouldBeFalse();
         }
 
         [Fact]
-        public void IsGenericReturnsTrueWhenTypeGeneric()
+        public async Task IsGenericReturnsTrueWhenTypeGeneric()
         {
             var source = @"
                             class TestClass<T1, T2>
                             {
                             }
                             ";
-            var symbol = CreateCompilation(source).GetTypeByMetadataName("TestClass`2");
+            var type = await RetrieveTypeFromSourceFragmentAsync(source, "TestClass`2");
 
-            var value = new MetadataTypeDescription(symbol).IsGeneric;
+            var value = type.IsGeneric;
 
             value.ShouldBeTrue();
         }
 
         [Fact]
-        public void IsGenericReturnsFalseWhenTypeNotGeneric()
+        public async Task IsGenericReturnsFalseWhenTypeNotGeneric()
         {
             var source = @"
                             class TestClass
                             {
                             }
                             ";
-            var symbol = CreateCompilation(source).GetTypeByMetadataName("TestClass");
+            var type = await RetrieveTypeFromSourceFragmentAsync(source, "TestClass");
 
-            var value = new MetadataTypeDescription(symbol).IsGeneric;
+            var value = type.IsGeneric;
 
             value.ShouldBeFalse();
         }
 
         [Fact]
-        public void IsStaticReturnsTrueWhenTypeIsStatic()
+        public async Task IsStaticReturnsTrueWhenTypeIsStatic()
         {
             var source = @"
                                     static class TestClass
                                     {
                                     }
                                     ";
-            var symbol = CreateCompilation(source).GetTypeByMetadataName("TestClass");
+            var type = await RetrieveTypeFromSourceFragmentAsync(source, "TestClass");
 
-            var value = new MetadataTypeDescription(symbol).IsStatic;
+            var value = type.IsStatic;
 
             value.ShouldBeTrue();
         }
 
         [Fact]
-        public void IsStaticReturnsFalseWhenTypeIsNotStatic()
+        public async Task IsStaticReturnsFalseWhenTypeIsNotStatic()
         {
             var source = @"
                                     class TestClass
                                     {
                                     }
                                     ";
-            var symbol = CreateCompilation(source).GetTypeByMetadataName("TestClass");
+            var type = await RetrieveTypeFromSourceFragmentAsync(source, "TestClass");
 
-            var value = new MetadataTypeDescription(symbol).IsStatic;
+            var value = type.IsStatic;
 
             value.ShouldBeFalse();
         }
 
         [Fact]
-        public void IsRefLikeReturnsTrueWhenTypeIsRefLike()
+        public async Task IsRefLikeReturnsTrueWhenTypeIsRefLike()
         {
             var source = @"
             ref struct TestStruct
             {
             }
             ";
-            var symbol = CreateCompilation(source).GetTypeByMetadataName("TestStruct");
+            var type = await RetrieveTypeFromSourceFragmentAsync(source, "TestStruct");
 
-            var value = new MetadataTypeDescription(symbol).IsRefLike;
+            var value = type.IsRefLike;
 
             value.ShouldBeTrue();
         }
 
         [Fact]
-        public void IsRefLikeReturnsFalseWhenTypeNotRefLike()
+        public async Task IsRefLikeReturnsFalseWhenTypeNotRefLike()
         {
             var source = @"
             struct TestStruct
             {
             }
             ";
-            var symbol = CreateCompilation(source).GetTypeByMetadataName("TestStruct");
+            var type = await RetrieveTypeFromSourceFragmentAsync(source, "TestStruct");
 
-            var value = new MetadataTypeDescription(symbol).IsRefLike;
+            var value = type.IsRefLike;
 
             value.ShouldBeFalse();
         }
 
         [Fact]
-        public void IsReadonlyReturnsTrueIfTypeIsReadonly()
+        public async Task IsReadonlyReturnsTrueIfTypeIsReadonly()
         {
             var source = @"
             readonly struct TestStruct
             {
             }
             ";
-            var symbol = CreateCompilation(source).GetTypeByMetadataName("TestStruct");
+            var type = await RetrieveTypeFromSourceFragmentAsync(source, "TestStruct");
 
-            var value = new MetadataTypeDescription(symbol).IsReadonly;
+            var value = type.IsReadonly;
 
             value.ShouldBeTrue();
         }
 
         [Fact]
-        public void IsReadonlyReturnsFalseWhenTypeNotReadonly()
+        public async Task IsReadonlyReturnsFalseWhenTypeNotReadonly()
         {
             var source = @"
             struct TestStruct
             {
             }
             ";
-            var symbol = CreateCompilation(source).GetTypeByMetadataName("TestStruct");
+            var type = await RetrieveTypeFromSourceFragmentAsync(source, "TestStruct");
 
-            var value = new MetadataTypeDescription(symbol).IsReadonly;
+            var value = type.IsReadonly;
 
             value.ShouldBeFalse();
         }
 
         [Fact]
-        public void AccessibilityPropertyReturnsPublicWhenTypeIsPublic()
+        public async Task AccessibilityPropertyReturnsPublicWhenTypeIsPublic()
         {
             var source = @"
             class TestParent
@@ -240,15 +241,16 @@ namespace Apiview.Tests.Model
                 }
             }
             ";
-            var symbol = CreateCompilation(source).GetTypeByMetadataName("TestParent+TestClass");
+            var doc = await RetrieveDocumentationAsync(source);
+            var type = doc.GetMetadataType("TestParent+TestClass")!;
 
-            var accessibility = new MetadataTypeDescription(symbol).Accessibility;
+            var accessibility = type.Accessibility;
 
             accessibility.ShouldBe(AccessibilityModifier.Public);
         }
 
         [Fact]
-        public void AccessibilityPropertyReturnsProtectedWhenTypeIsProtected()
+        public async Task AccessibilityPropertyReturnsProtectedWhenTypeIsProtected()
         {
             var source = @"
             class TestContainer
@@ -258,15 +260,16 @@ namespace Apiview.Tests.Model
                 }
             }
             ";
-            var symbol = CreateCompilation(source).GetTypeByMetadataName("TestContainer+TestClass");
+            var doc = await RetrieveDocumentationAsync(source);
+            var type = doc.GetMetadataType("TestContainer+TestClass")!;
 
-            var accessibility = new MetadataTypeDescription(symbol).Accessibility;
+            var accessibility = type.Accessibility;
 
             accessibility.ShouldBe(AccessibilityModifier.Protected);
         }
 
         [Fact]
-        public void AccessibilityPropertyReturnsProtectedInternalWhenTypeIsProtectedInternal()
+        public async Task AccessibilityPropertyReturnsProtectedInternalWhenTypeIsProtectedInternal()
         {
             var source = @"
             class TestContainer
@@ -276,15 +279,16 @@ namespace Apiview.Tests.Model
                 }
             }
             ";
-            var symbol = CreateCompilation(source).GetTypeByMetadataName("TestContainer+TestClass");
+            var doc = await RetrieveDocumentationAsync(source);
+            var type = doc.GetMetadataType("TestContainer+TestClass")!;
 
-            var accessibility = new MetadataTypeDescription(symbol).Accessibility;
+            var accessibility = type.Accessibility;
 
             accessibility.ShouldBe(AccessibilityModifier.ProtectedInternal);
         }
 
         [Fact]
-        public void AccessibilityPropertyReturnsPrivateProtectedWhenTypeIsPrivateProtected()
+        public async Task AccessibilityPropertyReturnsPrivateProtectedWhenTypeIsPrivateProtected()
         {
             var source = @"
             class TestParent
@@ -294,15 +298,16 @@ namespace Apiview.Tests.Model
                 }
             }
             ";
-            var symbol = CreateCompilation(source).GetTypeByMetadataName("TestParent+TestClass");
+            var doc = await RetrieveDocumentationAsync(source);
+            var type = doc.GetMetadataType("TestParent+TestClass")!;
 
-            var accessibility = new MetadataTypeDescription(symbol).Accessibility;
+            var accessibility = type.Accessibility;
 
             accessibility.ShouldBe(AccessibilityModifier.PrivateProtected);
         }
 
         [Fact]
-        public void AccessibilityPropertyReturnsInternalWhenTypeIsInternal()
+        public async Task AccessibilityPropertyReturnsInternalWhenTypeIsInternal()
         {
             var source = @"
             class TestParent
@@ -312,15 +317,16 @@ namespace Apiview.Tests.Model
         }
     }
     ";
-            var symbol = CreateCompilation(source).GetTypeByMetadataName("TestParent+TestClass");
+            var doc = await RetrieveDocumentationAsync(source);
+            var type = doc.GetMetadataType("TestParent+TestClass")!;
 
-            var accessibility = new MetadataTypeDescription(symbol).Accessibility;
+            var accessibility = type.Accessibility;
 
             accessibility.ShouldBe(AccessibilityModifier.Internal);
         }
 
         [Fact]
-        public void AccessibilityPropertyReturnsPrivateWhenTypeIsPrivate()
+        public async Task AccessibilityPropertyReturnsPrivateWhenTypeIsPrivate()
         {
             var source = @"
             class TestContainer
@@ -330,88 +336,89 @@ namespace Apiview.Tests.Model
                 }
             }
             ";
-            var symbol = CreateCompilation(source).GetTypeByMetadataName("TestContainer+TestClass");
+            var doc = await RetrieveDocumentationAsync(source);
+            var type = doc.GetMetadataType("TestContainer+TestClass")!;
 
-            var accessibility = new MetadataTypeDescription(symbol).Accessibility;
+            var accessibility = type.Accessibility;
 
             accessibility.ShouldBe(AccessibilityModifier.Private);
         }
 
         [Fact]
-        public void KindPropertyReturnsClassWhenTypeIsClass()
+        public async Task KindPropertyReturnsClassWhenTypeIsClass()
         {
             var source = @"
             class TestClass
             {
             }
             ";
-            var symbol = CreateCompilation(source).GetTypeByMetadataName("TestClass");
+            var type = await RetrieveTypeFromSourceFragmentAsync(source, "TestClass");
 
-            var kind = new MetadataTypeDescription(symbol).Kind;
+            var kind = type.Kind;
 
             kind.ShouldBe(TypeKind.Class);
         }
 
         [Fact]
-        public void KindPropertyReturnsInterfaceWhenTypeIsInterface()
+        public async Task KindPropertyReturnsInterfaceWhenTypeIsInterface()
         {
             var source = @"
             interface TestInterface
             {
             }
             ";
-            var symbol = CreateCompilation(source).GetTypeByMetadataName("TestInterface");
+            var type = await RetrieveTypeFromSourceFragmentAsync(source, "TestInterface");
 
-            var kind = new MetadataTypeDescription(symbol).Kind;
+            var kind = type.Kind;
 
             kind.ShouldBe(TypeKind.Interface);
         }
 
         [Fact]
-        public void KindPropertyReturnsStructWhenTypeIsStruct()
+        public async Task KindPropertyReturnsStructWhenTypeIsStruct()
         {
             var source = @"
             struct TestStruct
             {
             }
             ";
-            var symbol = CreateCompilation(source).GetTypeByMetadataName("TestStruct");
+            var type = await RetrieveTypeFromSourceFragmentAsync(source, "TestStruct");
 
-            var kind = new MetadataTypeDescription(symbol).Kind;
+            var kind = type.Kind;
 
             kind.ShouldBe(TypeKind.Struct);
         }
 
         [Fact]
-        public void KindPropertyReturnsEnumWhenTypeIsEnum()
+        public async Task KindPropertyReturnsEnumWhenTypeIsEnum()
         {
             var source = @"
             enum TestEnum
             {
             }
             ";
-            var symbol = CreateCompilation(source).GetTypeByMetadataName("TestEnum");
+            var type = await RetrieveTypeFromSourceFragmentAsync(source, "TestEnum");
 
-            var kind = new MetadataTypeDescription(symbol).Kind;
+            var kind = type.Kind;
 
             kind.ShouldBe(TypeKind.Enum);
         }
 
         [Fact]
-        public void KindPropertyReturnsDelegateWhenTypeIsDelegate()
+        public async Task KindPropertyReturnsDelegateWhenTypeIsDelegate()
         {
             var source = @"
             delegate void TestDelegate();
             ";
-            var symbol = CreateCompilation(source).GetTypeByMetadataName("TestDelegate");
+            var type = await RetrieveTypeFromSourceFragmentAsync(source, "TestDelegate");
 
-            var kind = new MetadataTypeDescription(symbol).Kind;
+            var kind = type.Kind;
 
             kind.ShouldBe(TypeKind.Delegate);
         }
 
         [Fact]
-        public void ParentPropertyReturnsMetadataTypeDescriptionWhenParentIsType()
+        public async Task ParentPropertyReturnsMetadataTypeDescriptionWhenParentIsType()
         {
             var source = @"
             class Test
@@ -421,34 +428,27 @@ namespace Apiview.Tests.Model
                 }
             }
             ";
-            var symbol = CreateCompilation(source).GetTypeByMetadataName("Test+Test2");
+            var doc = await RetrieveDocumentationAsync(source);
+            var type = doc.GetMetadataType("Test+Test2")!;
 
-            var parent = new MetadataTypeDescription(symbol).Parent;
+            var parent = type.Parent;
 
             _ = parent.ShouldBeOfType<MetadataTypeDescription>();
         }
 
         [Fact]
-        public void BaseTypePropertyReturnsNullForSystemObject()
+        public async Task BaseTypePropertyReturnsNullForSystemObject()
         {
-            // Can we even fake System.Object? let's assume we can.
-            var source = @"
-            namespace System
-            {
-                public class Object
-                {
-                }
-            }
-            ";
-            var symbol = CreateCompilation(source).GetTypeByMetadataName("System.Object");
+            var doc = await RetrieveDocumentationAsync();
+            var type = doc.GetMetadataType("System.Object")!;
 
-            var baseType = new MetadataTypeDescription(symbol).BaseType;
+            var baseType = type.BaseType;
 
             baseType.ShouldBeNull();
         }
 
         [Fact]
-        public void BaseTypePropertyReturnsMetadataTypeDescriptionWhenBaseNotMissing()
+        public async Task BaseTypePropertyReturnsMetadataTypeDescriptionWhenBaseNotMissing()
         {
             var source = @"
             public class TestBase
@@ -459,30 +459,39 @@ namespace Apiview.Tests.Model
             {
             }
             ";
-            var symbol = CreateCompilation(source).GetTypeByMetadataName("Test");
+            var type = await RetrieveTypeFromSourceFragmentAsync(source, "Test");
 
-            var baseType = new MetadataTypeDescription(symbol).BaseType;
+            var baseType = type.BaseType;
 
             _ = baseType.ShouldBeOfType<MetadataTypeDescription>();
         }
 
         [Fact]
-        public void BaseTypePropertyReturnsMissingMetadataTypeDescriptionWhenBaseMissing()
+        public async Task BaseTypePropertyReturnsMissingMetadataTypeDescriptionWhenBaseMissing()
         {
-            var source = @"
-            public class Test
+            // We need a base in one assembly and derived in other assembly, we create documentation only from the second.
+            var baseSource = @"
+            public class TestBase
             {
             }
             ";
-            var symbol = CreateCompilation(source).GetTypeByMetadataName("Test");
+            var derivedSource = @"
+            public class Test : TestBase
+            {
+            }
+            ";
+            var baseAssembly = CompileAssembly(baseSource, "Base");
+            var derivedAssembly = CompileAssembly(derivedSource, "Derived", baseAssembly);
+            var doc = await RetrieveDocumentationAsync(derivedAssembly);
+            var type = doc.GetMetadataType("Test")!;
 
-            var baseType = new MetadataTypeDescription(symbol).BaseType;
+            var baseType = type.BaseType;
 
             _ = baseType.ShouldBeOfType<MissingMetadataTypeDescription>();
         }
 
         [Fact]
-        public void BaseTypePropertyReturnsBaseTypeWithCorrectName()
+        public async Task BaseTypePropertyReturnsBaseTypeWithCorrectName()
         {
             var source = @"
             public class TestBase
@@ -493,30 +502,30 @@ namespace Apiview.Tests.Model
             {
             }
             ";
-            var symbol = CreateCompilation(source).GetTypeByMetadataName("Test");
+            var type = await RetrieveTypeFromSourceFragmentAsync(source, "Test");
 
-            var baseTypeName = new MetadataTypeDescription(symbol).BaseType!.Name;
+            var baseTypeName = type.BaseType!.Name;
 
             baseTypeName.ShouldBe("TestBase");
         }
 
         [Fact]
-        public void InterfacesPropertyReturnsEmptyArrayWhenNoInterfacesImplemented()
+        public async Task InterfacesPropertyReturnsEmptyArrayWhenNoInterfacesImplemented()
         {
             var source = @"
             public class Test
             {
             }
             ";
-            var symbol = CreateCompilation(source).GetTypeByMetadataName("Test");
+            var type = await RetrieveTypeFromSourceFragmentAsync(source, "Test");
 
-            var interfaces = new MetadataTypeDescription(symbol).Interfaces;
+            var interfaces = type.Interfaces;
 
             interfaces.ShouldBeEmpty();
         }
 
         [Fact]
-        public void InterfacesPropertyReturnsArrayWithOneElementWhenTypeImplementsOneInterface()
+        public async Task InterfacesPropertyReturnsArrayWithOneElementWhenTypeImplementsOneInterface()
         {
             var source = @"
             public interface TestInterface
@@ -527,15 +536,15 @@ namespace Apiview.Tests.Model
             {
             }
             ";
-            var symbol = CreateCompilation(source).GetTypeByMetadataName("Test");
+            var type = await RetrieveTypeFromSourceFragmentAsync(source, "Test");
 
-            var interfaces = new MetadataTypeDescription(symbol).Interfaces;
+            var interfaces = type.Interfaces;
 
             interfaces.Length.ShouldBe(1);
         }
 
         [Fact]
-        public void InterfacesPropertyReturnsArrayWithTwoElementsWhenTypeImplementsTwoInterfaces()
+        public async Task InterfacesPropertyReturnsArrayWithMultipleElementsWhenTypeImplementsMultipleInterfaces()
         {
             var source = @"
             public interface TestInterface1
@@ -550,15 +559,15 @@ namespace Apiview.Tests.Model
             {
             }
             ";
-            var symbol = CreateCompilation(source).GetTypeByMetadataName("Test");
+            var type = await RetrieveTypeFromSourceFragmentAsync(source, "Test");
 
-            var interfaces = new MetadataTypeDescription(symbol).Interfaces;
+            var interfaces = type.Interfaces;
 
             interfaces.Length.ShouldBe(2);
         }
 
         [Fact]
-        public void InterfacesPropertyReturnsCorrectInterfaceName()
+        public async Task InterfacesPropertyReturnsCorrectInterfaceName()
         {
             var source = @"
             public interface TestInterface
@@ -569,15 +578,15 @@ namespace Apiview.Tests.Model
             {
             }
             ";
-            var symbol = CreateCompilation(source).GetTypeByMetadataName("Test");
+            var type = await RetrieveTypeFromSourceFragmentAsync(source, "Test");
 
-            var interfaces = new MetadataTypeDescription(symbol).Interfaces;
+            var interfaces = type.Interfaces;
 
             interfaces[0].Name.ShouldBe("TestInterface");
         }
 
         [Fact]
-        public void InterfacesPropertyReturnsMetadataTypeDescriptionWhenInterfaceNotMissing()
+        public async Task InterfacesPropertyReturnsMetadataTypeDescriptionWhenInterfaceNotMissing()
         {
             var source = @"
             public interface TestInterface
@@ -588,29 +597,33 @@ namespace Apiview.Tests.Model
             {
             }
             ";
-            var symbol = CreateCompilation(source).GetTypeByMetadataName("Test");
+            var doc = await RetrieveDocumentationAsync(source);
+            var symbol = doc.GetMetadataType("Test")!;
 
-            var interfaces = new MetadataTypeDescription(symbol).Interfaces;
+            var interfaces = symbol.Interfaces;
 
             _ = interfaces[0].ShouldBeOfType<MetadataTypeDescription>();
         }
 
         [Fact]
-        public void InterfacePropertyReturnsMissingMetadataTypeDescriptionWhenInterfaceMissing()
+        public async Task InterfacePropertyReturnsMissingMetadataTypeDescriptionWhenInterfaceMissing()
         {
-            // Make a class with explicit base class and one interface, that makes things less ambiguous and will result in an error type in place of interface.
-            var source = @"
-            public class TestBase
-            {
-            }
-
-            public class Test : TestBase, TestInterface
+            var interfaceSource = @"
+            public interface TestInterface
             {
             }
             ";
-            var symbol = CreateCompilation(source).GetTypeByMetadataName("Test");
+            var implementationSource = @"
+            public class Test : TestInterface
+            {
+            }
+            ";
+            var interfaceAssembly = CompileAssembly(interfaceSource, "Interface");
+            var implementationAssembly = CompileAssembly(implementationSource, "Implementation", interfaceAssembly);
+            var doc = await RetrieveDocumentationAsync(implementationAssembly);
+            var type = doc.GetMetadataType("Test")!;
 
-            var interfaces = new MetadataTypeDescription(symbol).Interfaces;
+            var interfaces = type.Interfaces;
 
             _ = interfaces[0].ShouldBeOfType<MissingMetadataTypeDescription>();
         }

@@ -18,7 +18,7 @@ namespace Apiview.Model
         /// Initializes a new instance of the <see cref="MetadataTypeDescription"/> class.
         /// </summary>
         /// <param name="symbol">The wrapped roslyn symbol.</param>
-        public MetadataTypeDescription(INamedTypeSymbol symbol)
+        internal MetadataTypeDescription(INamedTypeSymbol symbol)
             : base(symbol)
         {
             // This constructor can be called only for INamedTypeSymbols proper, unless it is itself a subclass.

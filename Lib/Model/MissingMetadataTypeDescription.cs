@@ -19,7 +19,7 @@ namespace Apiview.Model
         /// Initializes a new instance of the <see cref="MissingMetadataTypeDescription"/> class.
         /// </summary>
         /// <param name="symbol">An instance of <see cref="IErrorTypeSymbol"/>.</param>
-        public MissingMetadataTypeDescription(IErrorTypeSymbol symbol)
+        internal MissingMetadataTypeDescription(IErrorTypeSymbol symbol)
             : base(symbol)
         {
         }

@@ -2,6 +2,7 @@
 // All rights reserved.
 // This file is licensed under the BSD-2-Clause license, see 'LICENSE' file in source root for more details.
 
+using System.Threading.Tasks;
 using Apiview.Model;
 using Microsoft.CodeAnalysis;
 using Shouldly;
@@ -15,78 +16,68 @@ namespace Apiview.Tests.Model
     public class MissingMetadataTypeDescriptionTests : TestBase
     {
         [Fact]
-        public void NamePropertyReturnsNameWithoutArityForMissingNonGenericTypes()
+        public async Task NamePropertyReturnsNameWithoutArityForMissingNonGenericTypes()
         {
-            var compilation = CreateCompilation(string.Empty);
-            var symbol = (IErrorTypeSymbol)compilation.CreateErrorTypeSymbol(compilation.GlobalNamespace, "Test", 0);
+            var type = await this.GetMissingTypeAsync("MissingClass");
 
-            var name = new MissingMetadataTypeDescription(symbol).Name;
+            var name = type.Name;
 
-            name.ShouldBe("Test");
+            name.ShouldBe("MissingClass");
         }
 
         [Fact]
-        public void NamePropertyReturnsNameWithArityForMissingGenericTypes()
+        public async Task NamePropertyReturnsNameWithArityForMissingGenericTypes()
         {
-            var compilation = CreateCompilation(string.Empty);
-            var symbol = (IErrorTypeSymbol)compilation.CreateErrorTypeSymbol(compilation.GlobalNamespace, "Test", 1);
+            var type = await this.GetMissingTypeAsync("MissingClass<int>");
 
-            var name = new MissingMetadataTypeDescription(symbol).Name;
+            var name = type.Name;
 
-            name.ShouldBe("Test`1");
+            name.ShouldBe("MissingClass`1");
         }
 
         [Fact]
-        public void AccessibilityPropertyReturnsNullForMissingTypes()
+        public async Task AccessibilityPropertyReturnsNullForMissingTypes()
         {
-            var compilation = CreateCompilation(string.Empty);
-            var symbol = (IErrorTypeSymbol)compilation.CreateErrorTypeSymbol(compilation.GlobalNamespace, "Test", 0);
+            var type = await this.GetMissingTypeAsync("MissingClass");
 
-            var accessibility = new MissingMetadataTypeDescription(symbol).Accessibility;
+            var accessibility = type.Accessibility;
 
             accessibility.ShouldBeNull();
         }
 
         [Fact]
-        public void KindPropertyReturnsMissingForMissingTypes()
+        public async Task KindPropertyReturnsMissingForMissingTypes()
         {
-            var compilation = CreateCompilation(string.Empty);
-            var symbol = (IErrorTypeSymbol)compilation.CreateErrorTypeSymbol(compilation.GlobalNamespace, "Test", 0);
+            var type = await this.GetMissingTypeAsync("MissingClass");
 
-            var kind = new MissingMetadataTypeDescription(symbol).Kind;
+            var kind = type.Kind;
 
             kind.ShouldBe(Apiview.Model.TypeKind.Missing);
         }
 
         [Fact]
-        public void ParentPropertyReturnsMetadataTypeDescriptionForMissingTypesContainedInOtherNonMissingTypes()
+        public async Task ParentPropertyReturnsMissingMetadataTypeDescriptionForMissingTypesContainedInOtherMissingTypes()
         {
-            var source = @"
-            public class TestContainer
-            {
-            }
-            ";
+            var type = await this.GetMissingTypeAsync("MissingClass.MissingNestedClass");
 
-            // To create a missing type with Test type as parent, we have to use CreateErrorTypeSymbol method, to wrap it.
-            var compilation = CreateCompilation(source);
-            var baseSymbol = compilation.GetTypeByMetadataName("TestContainer");
-            var symbol = (IErrorTypeSymbol)compilation.CreateErrorTypeSymbol(baseSymbol, "Test", 0);
-
-            var parent = new MissingMetadataTypeDescription(symbol).Parent;
-
-            _ = parent.ShouldBeOfType<MetadataTypeDescription>();
-        }
-
-        [Fact]
-        public void ParentPropertyReturnsMissingMetadataTypeDescriptionForMissingTypesContainedInOtherMissingTypes()
-        {
-            var compilation = CreateCompilation(string.Empty);
-            var symbol = (IErrorTypeSymbol)compilation.CreateErrorTypeSymbol(compilation.GlobalNamespace, "TestBase", 0);
-            symbol = (IErrorTypeSymbol)compilation.CreateErrorTypeSymbol(symbol, "Test", 0);
-
-            var parent = new MissingMetadataTypeDescription(symbol).Parent;
+            var parent = type.Parent;
 
             _ = parent.ShouldBeOfType<MissingMetadataTypeDescription>();
+        }
+
+        /// <summary>
+        /// This method retrieves the missing type. As it is not possible in usual ways because they do not exist, it is done with a trick. We make some class inheriting from the type from the missing assembly.
+        /// When we load documentation with the new assembly, the MissingTypes assembly is not referenced anymore, and the new type's base becomes missing. We could not get it directly because it would not be found.
+        /// Note that the type name is given as c# language type name, not metadata, because this is input for source generation.
+        /// </summary>
+        private async Task<MetadataTypeDescription> GetMissingTypeAsync(string typeName)
+        {
+            var source = $@"
+            public class Test : {typeName}
+            {{
+            }}
+            ";
+            return (await RetrieveTypeFromSourceFragmentAsync(source, "Test", MissingTypesAssembly)).BaseType!;
         }
     }
 }

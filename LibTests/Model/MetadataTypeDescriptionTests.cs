@@ -241,8 +241,7 @@ namespace Apiview.Tests.Model
                 }
             }
             ";
-            var doc = await RetrieveDocumentationAsync(source);
-            var type = doc.GetMetadataType("TestParent+TestClass")!;
+            var type = await RetrieveTypeFromSourceFragmentAsync(source, "TestParent+TestClass");
 
             var accessibility = type.Accessibility;
 
@@ -260,8 +259,7 @@ namespace Apiview.Tests.Model
                 }
             }
             ";
-            var doc = await RetrieveDocumentationAsync(source);
-            var type = doc.GetMetadataType("TestContainer+TestClass")!;
+            var type = await RetrieveTypeFromSourceFragmentAsync(source, "TestContainer+TestClass");
 
             var accessibility = type.Accessibility;
 
@@ -279,8 +277,7 @@ namespace Apiview.Tests.Model
                 }
             }
             ";
-            var doc = await RetrieveDocumentationAsync(source);
-            var type = doc.GetMetadataType("TestContainer+TestClass")!;
+            var type = await RetrieveTypeFromSourceFragmentAsync(source, "TestContainer+TestClass");
 
             var accessibility = type.Accessibility;
 
@@ -298,8 +295,7 @@ namespace Apiview.Tests.Model
                 }
             }
             ";
-            var doc = await RetrieveDocumentationAsync(source);
-            var type = doc.GetMetadataType("TestParent+TestClass")!;
+            var type = await RetrieveTypeFromSourceFragmentAsync(source, "TestParent+TestClass");
 
             var accessibility = type.Accessibility;
 
@@ -317,8 +313,7 @@ namespace Apiview.Tests.Model
         }
     }
     ";
-            var doc = await RetrieveDocumentationAsync(source);
-            var type = doc.GetMetadataType("TestParent+TestClass")!;
+            var type = await RetrieveTypeFromSourceFragmentAsync(source, "TestParent+TestClass");
 
             var accessibility = type.Accessibility;
 
@@ -336,8 +331,7 @@ namespace Apiview.Tests.Model
                 }
             }
             ";
-            var doc = await RetrieveDocumentationAsync(source);
-            var type = doc.GetMetadataType("TestContainer+TestClass")!;
+            var type = await RetrieveTypeFromSourceFragmentAsync(source, "TestContainer+TestClass");
 
             var accessibility = type.Accessibility;
 
@@ -428,8 +422,7 @@ namespace Apiview.Tests.Model
                 }
             }
             ";
-            var doc = await RetrieveDocumentationAsync(source);
-            var type = doc.GetMetadataType("Test+Test2")!;
+            var type = await RetrieveTypeFromSourceFragmentAsync(source, "Test+Test2");
 
             var parent = type.Parent;
 
@@ -439,8 +432,7 @@ namespace Apiview.Tests.Model
         [Fact]
         public async Task BaseTypePropertyReturnsNullForSystemObject()
         {
-            var doc = await RetrieveDocumentationAsync();
-            var type = doc.GetMetadataType("System.Object")!;
+            var type = await RetrieveTypeFromSourceFragmentAsync(null, "System.Object");
 
             var baseType = type.BaseType;
 
@@ -469,21 +461,12 @@ namespace Apiview.Tests.Model
         [Fact]
         public async Task BaseTypePropertyReturnsMissingMetadataTypeDescriptionWhenBaseMissing()
         {
-            // We need a base in one assembly and derived in other assembly, we create documentation only from the second.
-            var baseSource = @"
-            public class TestBase
+            var source = @"
+            public class Test : MissingClass
             {
             }
             ";
-            var derivedSource = @"
-            public class Test : TestBase
-            {
-            }
-            ";
-            var baseAssembly = CompileAssembly(baseSource, "Base");
-            var derivedAssembly = CompileAssembly(derivedSource, "Derived", baseAssembly);
-            var doc = await RetrieveDocumentationAsync(derivedAssembly);
-            var type = doc.GetMetadataType("Test")!;
+            var type = await RetrieveTypeFromSourceFragmentAsync(source, "Test", MissingTypesAssembly);
 
             var baseType = type.BaseType;
 
@@ -597,10 +580,9 @@ namespace Apiview.Tests.Model
             {
             }
             ";
-            var doc = await RetrieveDocumentationAsync(source);
-            var symbol = doc.GetMetadataType("Test")!;
+            var type = await RetrieveTypeFromSourceFragmentAsync(source, "Test");
 
-            var interfaces = symbol.Interfaces;
+            var interfaces = type.Interfaces;
 
             _ = interfaces[0].ShouldBeOfType<MetadataTypeDescription>();
         }
@@ -608,20 +590,12 @@ namespace Apiview.Tests.Model
         [Fact]
         public async Task InterfacePropertyReturnsMissingMetadataTypeDescriptionWhenInterfaceMissing()
         {
-            var interfaceSource = @"
-            public interface TestInterface
+            var source = @"
+            public class Test : MissingInterface
             {
             }
             ";
-            var implementationSource = @"
-            public class Test : TestInterface
-            {
-            }
-            ";
-            var interfaceAssembly = CompileAssembly(interfaceSource, "Interface");
-            var implementationAssembly = CompileAssembly(implementationSource, "Implementation", interfaceAssembly);
-            var doc = await RetrieveDocumentationAsync(implementationAssembly);
-            var type = doc.GetMetadataType("Test")!;
+            var type = await RetrieveTypeFromSourceFragmentAsync(source, "Test", MissingTypesAssembly);
 
             var interfaces = type.Interfaces;
 

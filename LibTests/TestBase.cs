@@ -6,9 +6,9 @@ using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Apiview.Model;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Apiview.Tests
 {
@@ -17,34 +17,40 @@ namespace Apiview.Tests
     /// </summary>
     public class TestBase
     {
+        /// <summary>
+        /// This string constant contains source text for the <c>MissingTypes</c> assembly. This assembly contains special types intended to test behavior related to handling of missing types.
+        /// </summary>
+        /// <remarks>
+        /// <para>Note that this assembly will be included during compilation of input assemblies, but is not itself intended to be included as input, so that all types referenced from this assembly will appear as missing.</para>
+        /// </remarks>
+        protected const string MissingTypesSource = @"
+        public class MissingClass { public class MissingNestedClass {} }
+        public class MissingClass<T> {}
+        public interface MissingInterface {}
+        public interface MissingInterface<t> {}
+        ";
+
+        /// <summary>
+        /// This is the memory image of metadata of the base assembly containing System.Object and other basic clr types.
+        /// </summary>    {
         protected static readonly ImmutableArray<byte> BaseMetadataImage = ImmutableArray.Create(File.ReadAllBytes(typeof(object).Assembly.Location));
+
+        /// <summary>
+        /// A roslyn metadata reference for the assembly containing System.Object and other base clr types.
+        /// </summary>
         protected static readonly MetadataReference BaseMetadata = MetadataReference.CreateFromImage(BaseMetadataImage, MetadataReferenceProperties.Assembly, null, typeof(object).Assembly.Location);
+
+        /// <summary>
+        /// Compiled MissingTypes assembly in the form of a memory image.
+        /// </summary>
+        /// <seealso cref="MissingTypesSource"/>
+        protected static readonly ImmutableArray<byte> MissingTypesAssembly = CompileAssembly(MissingTypesSource, "MissingTypes");
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TestBase"/> class.
         /// </summary>
         protected TestBase()
         {
-        }
-
-        /// <summary>
-        /// Creates a <see cref="Compilation"/> instance based on a given c# source code fragment.
-        /// </summary>
-        /// <param name="source">Source text to compile, <c>null</c> for an empty compilation.</param>
-        /// <param name="assemblyName">The assembly name, <c>null</c> for no name.</param>
-        /// <returns>The <see cref="Compilation"/> instance.</returns>
-        protected static Compilation CreateCompilation(string? source = null, string? assemblyName = null)
-        {
-            // Start with an empty compilation
-            var compilation = CSharpCompilation.Create(assemblyName).WithOptions(new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
-
-            // Optionally add syntax tree to interpret, parsed from a given source fragment.
-            if (source != null)
-            {
-                compilation = compilation.AddSyntaxTrees(SyntaxFactory.ParseSyntaxTree(source));
-            }
-
-            return compilation;
         }
 
         /// <summary>
@@ -95,10 +101,11 @@ namespace Apiview.Tests
         /// <para>If you need to generate documentation from different inputs, change the assembly name or combine multiple assemblies, see the overload accepting byte arrays.</para>
         /// </remarks>
         /// <param name="source">The source to compile.</param>
+        /// <param name="assemblies">Assemblies references during compilation of the source fragment in addition to the base assembly. Note that they are not added to the documentation object.</param>
         /// <returns>The <see cref="Task{TResult}"/> containing the <see cref="Documentation"/> object after completion.</returns>
-        protected static Task<Documentation> RetrieveDocumentationAsync(string? source = null)
+        protected static Task<Documentation> RetrieveDocumentationAsync(string? source = null, params ImmutableArray<byte>[] assemblies)
         {
-            return RetrieveDocumentationAsync(CompileAssembly(source));
+            return RetrieveDocumentationAsync(CompileAssembly(source, "TestAssembly", assemblies));
         }
 
         /// <summary>
@@ -107,13 +114,34 @@ namespace Apiview.Tests
         /// <remarks>
         /// <para>The source fragment is first compiled, and a documentation object is generated for it.</para>
         /// </remarks>
-        /// <param name="source">The source fragment to compile.</param>
+        /// <param name="source">The source fragment to compile or <c>null</c> for empty assembly.</param>
         /// <param name="typeName">The full type metadata name that is expected to be found in the fragment.</param>
+        /// <param name="assemblies">The additional assembly references to use when compiling the fragment.</param>
         /// <returns>The type.</returns>
-        protected static async Task<MetadataTypeDescription> RetrieveTypeFromSourceFragmentAsync(string source, string typeName)
+        protected static async Task<MetadataTypeDescription> RetrieveTypeFromSourceFragmentAsync(string? source, string typeName, params ImmutableArray<byte>[] assemblies)
         {
-            var doc = await RetrieveDocumentationAsync(source);
+            var doc = await RetrieveDocumentationAsync(source, assemblies);
             return doc.GetMetadataType(typeName)!;
+        }
+
+        /// <summary>
+        /// Creates a <see cref="Compilation"/> instance based on a given c# source code fragment.
+        /// </summary>
+        /// <param name="source">Source text to compile, <c>null</c> for an empty compilation.</param>
+        /// <param name="assemblyName">The assembly name, <c>null</c> for no name.</param>
+        /// <returns>The <see cref="Compilation"/> instance.</returns>
+        private static Compilation CreateCompilation(string? source = null, string? assemblyName = null)
+        {
+            // Start with an empty compilation
+            var compilation = CSharpCompilation.Create(assemblyName).WithOptions(new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
+
+            // Optionally add syntax tree to interpret, parsed from a given source fragment.
+            if (source != null)
+            {
+                compilation = compilation.AddSyntaxTrees(SyntaxFactory.ParseSyntaxTree(source));
+            }
+
+            return compilation;
         }
     }
 }

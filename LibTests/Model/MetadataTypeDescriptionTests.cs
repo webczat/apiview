@@ -430,6 +430,26 @@ namespace Apiview.Tests.Model
         }
 
         [Fact]
+        public async Task ParentPropertyReturnsCorrectTypeWhenParentIsType()
+        {
+            var source = @"
+            class Test
+            {
+                class Test2
+                {
+                }
+            }
+            ";
+            var doc = await RetrieveDocumentationAsync(source);
+            var type = doc.GetMetadataType("Test+Test2")!;
+            var expectedParent = doc.GetMetadataType("Test")!;
+
+            var actualParent = type.Parent;
+
+            actualParent.ShouldBeEquivalentTo(expectedParent);
+        }
+
+        [Fact]
         public async Task BaseTypePropertyReturnsNullForSystemObject()
         {
             var type = await RetrieveTypeFromSourceFragmentAsync(null, "System.Object");
@@ -474,7 +494,7 @@ namespace Apiview.Tests.Model
         }
 
         [Fact]
-        public async Task BaseTypePropertyReturnsBaseTypeWithCorrectName()
+        public async Task BaseTypePropertyReturnsCorrectBaseType()
         {
             var source = @"
             public class TestBase
@@ -485,11 +505,13 @@ namespace Apiview.Tests.Model
             {
             }
             ";
-            var type = await RetrieveTypeFromSourceFragmentAsync(source, "Test");
+            var doc = await RetrieveDocumentationAsync(source);
+            var type = doc.GetMetadataType("Test")!;
+            var expectedBaseType = doc.GetMetadataType("TestBase")!;
 
-            var baseTypeName = type.BaseType!.Name;
+            var actualBaseType = type.BaseType;
 
-            baseTypeName.ShouldBe("TestBase");
+            actualBaseType.ShouldBeEquivalentTo(expectedBaseType);
         }
 
         [Fact]
@@ -550,7 +572,7 @@ namespace Apiview.Tests.Model
         }
 
         [Fact]
-        public async Task InterfacesPropertyReturnsCorrectInterfaceName()
+        public async Task InterfacesPropertyReturnsCorrectInterface()
         {
             var source = @"
             public interface TestInterface
@@ -561,11 +583,13 @@ namespace Apiview.Tests.Model
             {
             }
             ";
-            var type = await RetrieveTypeFromSourceFragmentAsync(source, "Test");
+            var doc = await RetrieveDocumentationAsync(source);
+            var type = doc.GetMetadataType("Test")!;
+            var expectedInterface = doc.GetMetadataType("TestInterface")!;
 
             var interfaces = type.Interfaces;
 
-            interfaces[0].Name.ShouldBe("TestInterface");
+            interfaces[0].ShouldBeEquivalentTo(expectedInterface);
         }
 
         [Fact]

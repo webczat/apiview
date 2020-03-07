@@ -56,6 +56,17 @@ namespace Apiview.Tests.Model
         }
 
         [Fact]
+        public async Task ParentPropertyReturnsCorrectParentForMissingTypesContainedInOtherMissingTypes()
+        {
+            var type = await this.GetMissingTypeAsync("MissingClass.MissingNestedClass");
+            var expectedParent = await this.GetMissingTypeAsync("MissingClass");
+
+            var actualParent = type.Parent;
+
+            actualParent.ShouldBeEquivalentTo(expectedParent);
+        }
+
+        [Fact]
         public async Task ParentPropertyReturnsMissingMetadataTypeDescriptionForMissingTypesContainedInOtherMissingTypes()
         {
             var type = await this.GetMissingTypeAsync("MissingClass.MissingNestedClass");

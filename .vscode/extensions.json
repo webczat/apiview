@@ -7,11 +7,11 @@
     "EditorConfig.EditorConfig",
     "formulahendry.dotnet-test-explorer",
     "GitHub.vscode-pull-request-github",
-    "ms-vscode.csharp",
     "tintoy.msbuild-project-tools",
     "OmarTawfik.github-actions-vscode",
     "redhat.vscode-yaml",
-    "DotJoshJohnson.xml"
+    "DotJoshJohnson.xml",
+    "ms-dotnettools.csharp"
   ],
   // List of extensions recommended by VS Code that should not be recommended for users of this workspace.
   "unwantedRecommendations": []
